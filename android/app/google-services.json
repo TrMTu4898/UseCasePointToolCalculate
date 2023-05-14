@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "242177661490",
+    "project_id": "usecasepointtool",
+    "storage_bucket": "usecasepointtool.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242177661490:android:56857ab3c13c4d321bfa2b",
+        "android_client_info": {
+          "package_name": "com.example.usecasepointstool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "242177661490-7f14oo3ogsmqk10hisjion70bir1amnf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDw2PGw3mtw3f2IpKh5rE-Bbrzg69_Nuyg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "242177661490-7f14oo3ogsmqk10hisjion70bir1amnf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "242177661490-nhpc1q2bssm7asvh2u6uggplb5fdbpvq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.usecasetool"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242177661490:android:6f289e3c1891d94e1bfa2b",
+        "android_client_info": {
+          "package_name": "com.example.usecasetool"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "242177661490-7f14oo3ogsmqk10hisjion70bir1amnf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDw2PGw3mtw3f2IpKh5rE-Bbrzg69_Nuyg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "242177661490-7f14oo3ogsmqk10hisjion70bir1amnf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "242177661490-nhpc1q2bssm7asvh2u6uggplb5fdbpvq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.usecasetool"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
