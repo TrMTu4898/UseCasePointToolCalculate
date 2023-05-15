@@ -3,7 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:usecasepointstool/layout/top_left_layout.dart';
 import 'package:usecasepointstool/widgets/button/button_start.dart';
-import 'package:usecasepointstool/widgets/widget_get_started.dart';
+import 'package:usecasepointstool/widgets/widgets_screen/widget_get_started.dart';
 
 @RoutePage()
 class GetStartedScreen extends StatelessWidget {

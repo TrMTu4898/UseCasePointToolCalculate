@@ -5,7 +5,7 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:usecasepointstool/bloc/use_case_point/use_case_points_bloc.dart';
 import 'package:usecasepointstool/layout/top_left_layout.dart';
 import 'package:usecasepointstool/widgets/button/button_calculate.dart';
-import 'package:usecasepointstool/widgets/custom_table.dart';
+import 'package:usecasepointstool/widgets/widgets_screen/widget_table.dart';
 
 @RoutePage()
 class UUCPPage extends StatefulWidget {
@@ -69,6 +69,7 @@ class _UUCPPageState extends State<UUCPPage> {
           );
         },
         child: SafeArea(
+          minimum: const EdgeInsets.only(left: 0, right: 0, top: 0),
           child: Stack(
             children: [
               Container(
@@ -76,8 +77,8 @@ class _UUCPPageState extends State<UUCPPage> {
               ),
               Positioned(
                   top: screenHeight / 3.5,
-                  left: 0,
-                  right: 0,
+                  left: 15,
+                  width: screenWidth-30,
                   child: ListView(
                       shrinkWrap: true,
                       physics: const ClampingScrollPhysics(),
@@ -138,9 +139,8 @@ class _UUCPPageState extends State<UUCPPage> {
               ),
               Positioned(
                 top: screenHeight / 8,
-                left: 0,
-                right: 0,
-                bottom: 0,
+                left: 15,
+                width: screenWidth-30,
                 child: CustomTable(
                   data: data,
                   hasHeader: false,

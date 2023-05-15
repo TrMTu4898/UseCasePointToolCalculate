@@ -5,7 +5,7 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:usecasepointstool/bloc/use_case_point/use_case_points_bloc.dart';
 import 'package:usecasepointstool/layout/top_left_layout.dart';
 import 'package:usecasepointstool/widgets/button/button_calculate.dart';
-import 'package:usecasepointstool/widgets/custom_card.dart';
+import 'package:usecasepointstool/widgets/widgets_screen/widget_card_dropdown.dart';
 
 @RoutePage()
 class TCFPage extends StatefulWidget {

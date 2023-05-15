@@ -30,14 +30,14 @@ class AuthenticationBloc
           emit(AuthenticationAuthenticated(user: user));
         }
         else{
-          emit(AuthenticationUnauthenticated());
+          emit(const AuthenticationUnauthenticated(error: "Login unsuccessful!!"));
         }
       }
       else{
-        emit(AuthenticationUnauthenticated());
+        emit(const AuthenticationUnauthenticated(error: "Login unsuccessful!!"));
       }
     }catch(_){
-      emit(AuthenticationUnauthenticated());
+      emit(const AuthenticationUnauthenticated(error: "Login unsuccessful!!"));
     }
   }
   Future<void> _onLogInRequested(
@@ -46,10 +46,10 @@ class AuthenticationBloc
     emit(AuthenticationLoading());
     try{
       final Person user = (await _personRepository.signIn(email: event.email, password: event.password)) as Person;
-      Fluttertoast.showToast(msg: 'Đăng nhập thành công');
+      Fluttertoast.showToast(msg: 'Login success');
       emit(AuthenticationAuthenticated(user: user));
     }catch(_){
-      emit(AuthenticationUnauthenticated());
+      emit(const AuthenticationUnauthenticated(error: "Login unsuccessful!!"));
     }
 
   }

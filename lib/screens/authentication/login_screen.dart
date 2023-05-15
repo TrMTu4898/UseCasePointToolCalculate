@@ -3,6 +3,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:usecasepointstool/bloc/authentication/authentication_bloc.dart';
 import 'package:usecasepointstool/data/repositories/person_repository.dart';
 import 'package:usecasepointstool/router/auto_router.gr.dart';
@@ -201,17 +202,35 @@ class _LogInScreenState extends State<LogInScreen> {
               ),
             ),
             // --------------------------Login----------------------
-            SignInButton(
-              onPressed: () {
-                login(context);
-                authenticationBloc.add(
-                    LogInRequested(
-                        email:_email.toString() ,
-                        password:_passWord.toString()
-                    ));
-                context.pushRoute(const HomeViewRoute());
-              },
+            BlocBuilder<AuthenticationBloc,AuthenticationState>(
+              builder: (context, state){
+                if(state is AuthenticationLoading){
+                  return const CircularProgressIndicator();
+            }else if( state is AuthenticationUnauthenticated){
+                  Fluttertoast.showToast(
+                      msg: "Login unsuccessful!!",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                } return SignInButton(
+                  onPressed: () {
+                    login(context);
+                    authenticationBloc.add(
+                        LogInRequested(
+                            email:_email.toString() ,
+                            password:_passWord.toString()
+                        ));
+                    context.pushRoute(const HomeViewRoute());
+                  },
+                );
+            },
+
             ),
+            
+
             // --------------------------Forgot passWord----------------------
             const SizedBox(
               height: 15,

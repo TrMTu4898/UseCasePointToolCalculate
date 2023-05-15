@@ -16,7 +16,7 @@ class CustomTable extends StatelessWidget {
           index,
           TableRow(
             decoration: BoxDecoration(
-              color: (index == 0 || index == 4)
+              color: (index == 0 )
                   ? const Color(0xFF50C2C9)
                   : null,
             ),
@@ -26,7 +26,7 @@ class CustomTable extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       color: (index == 0 || row.indexOf(cell) == 0)
-                          ? const Color(0xFF50C2C9)
+                          ? const Color.fromARGB(0, 0, 0, 0)
                           : null,
                     ),
                     child: Center(
@@ -40,7 +40,9 @@ class CustomTable extends StatelessWidget {
         .values
         .toList();
     return Table(
-      border: TableBorder.all(),
+      border: TableBorder.all(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       defaultColumnWidth: const IntrinsicColumnWidth(),
       columnWidths: const <int, TableColumnWidth>{

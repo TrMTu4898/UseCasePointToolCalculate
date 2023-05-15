@@ -25,8 +25,16 @@ class AuthenticationAuthenticated extends AuthenticationState {
 }
 
 class AuthenticationUnauthenticated extends AuthenticationState {
+  final String error;
+
+  const AuthenticationUnauthenticated({required this.error});
+
+  String getError() {
+    return error;
+  }
+
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [error];
 }
 
 class Unauthenticated extends AuthenticationState {

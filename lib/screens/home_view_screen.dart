@@ -1,8 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:usecasepointstool/router/auto_router.gr.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usecasepointstool/widgets/button/bottom_navigation.dart';
+import 'package:boxicons/boxicons.dart';
 
 @RoutePage()
 class HomeViewScreen extends StatefulWidget {
@@ -16,6 +18,7 @@ class HomeViewScreen extends StatefulWidget {
 
 class _HomeViewScreenState extends State<HomeViewScreen> {
   bool _isFirstTimeUser = true;
+  var selectedIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -34,72 +37,40 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     List<BottomNavigationBarItem> visibleItems = [
       MyBottomNavigationBarItem(
         label: 'Home',
-        icon: Container(
-          decoration: const BoxDecoration(
-            shape: BoxShape.rectangle,
-          ),
-          padding: const EdgeInsets.all(8),
-          child: Image.asset(
-            'assets/images/Bottom_Navigation_Home_Icon.png',
-            width: 25,
-            height: 25,
-            fit: BoxFit.cover,
-          ),
+        icon: const Icon(
+          IconlyLight.home,
+          size: 25,
         ),
-
+        selectedColor: Colors.blue,
+        unselectedColor: Colors.transparent,
+        isSelected: selectedIndex == 0,
       ),
       MyBottomNavigationBarItem(
-          label: 'Tool',
-          icon: Container(
-            decoration: const BoxDecoration(
-              shape: BoxShape.rectangle,
-            ),
-            padding: const EdgeInsets.all(8),
-            child: Image.asset(
-              'assets/images/Bottom_Navigation_Tool_Icon.png',
-              width: 25,
-              height: 25,
-              fit: BoxFit.cover,
-            ),
-          ),
-          ),
+        label: 'Tool',
+        icon: const Icon(IconlyLight.work, size: 25),
+        selectedColor: Colors.blue,
+        unselectedColor: Colors.transparent,
+        isSelected: selectedIndex == 1,
+      ),
       MyBottomNavigationBarItem(
-          label: 'Home',
-          icon: Container(
-            decoration: const BoxDecoration(
-              shape: BoxShape.rectangle,
-            ),
-            padding: const EdgeInsets.all(8),
-            child: Image.asset(
-              'assets/images/Bottom_Navigation_History_Icon.png',
-              width: 25,
-              height: 25,
-              fit: BoxFit.cover,
-            ),
-          ),
-          ),
+        label: 'History',
+        icon: const Icon(IconlyLight.document, size: 25),
+        selectedColor: Colors.blue,
+        unselectedColor: Colors.transparent,
+        isSelected: selectedIndex == 2,
+      ),
       MyBottomNavigationBarItem(
-          label: 'Home',
-          icon: Container(
-            decoration: const BoxDecoration(
-              shape: BoxShape.rectangle,
-            ),
-            padding: const EdgeInsets.all(8),
-            child: Image.asset(
-              'assets/images/Bottom_Navigation_Profile_Icon.png',
-              width: 25,
-              height: 25,
-              fit: BoxFit.cover,
-            ),
-          ),
+        label: 'Profile',
+        icon: const Icon(IconlyLight.profile, size: 25),
+        selectedColor: Colors.blue,
+        unselectedColor: Colors.transparent,
+        isSelected: selectedIndex == 3,
       ),
     ];
-    final router = AutoRouter.of(context);
-
+final router = AutoRouter.of(context);
     return AutoTabsRouter.pageView(
       routes: const [
         HomeRoute(),
@@ -109,13 +80,20 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
       ],
       builder: (context, child, _) {
         final tabsRouter = AutoTabsRouter.of(context);
+        void onButtonSelected(int index) {
+          final tabsRouter = AutoTabsRouter.of(context);
+          setState(() {
+            selectedIndex = index;
+          });
+          tabsRouter.setActiveIndex(index);
+        }
         return Scaffold(
           body: child,
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: tabsRouter.activeIndex,
             selectedItemColor: const Color(0xff50C2C9),
-            unselectedItemColor: Colors.grey,
-            onTap: tabsRouter.setActiveIndex,
+            unselectedItemColor: Colors.black,
+            onTap: onButtonSelected,
             backgroundColor: Colors.white,
             type: BottomNavigationBarType.fixed,
             showSelectedLabels: false,
