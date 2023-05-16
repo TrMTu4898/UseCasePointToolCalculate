@@ -13,7 +13,7 @@ class AppRouter extends $AppRouter{
       RedirectRoute(path: '', redirectTo: 'Home'),
       AutoRoute(path: 'Home', page: HomeRoute.page),
       AutoRoute(path: 'History', page: UseCasePointHistoryRoute.page),
-      AutoRoute(path: 'LogIn', page: LogInRoute.page),
+      AutoRoute(path: 'Profile', page: ProfileRoute.page),
       AutoRoute(path: 'Tool',page: UseCasePointRoute.page,
         children: [
           AutoRoute(page: UUCPRoute.page),
@@ -26,7 +26,7 @@ class AppRouter extends $AppRouter{
     ],
     ),
     AutoRoute(path:'/Import',page: ImportRoute.page),
-    //AutoRoute(path: '/LogIn',page: LogInRoute.page),
+    AutoRoute(path: '/LogIn',page: LogInRoute.page),
     AutoRoute(path:'/ForgotPassWord',page: ForgotPasswordRoute.page),
     AutoRoute(path:'/Register',page: RegisterRoute.page),
   ];

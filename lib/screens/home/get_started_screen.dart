@@ -21,7 +21,7 @@ class GetStartedScreen extends StatelessWidget {
             const Positioned(
               top: 0,
               left: 0,
-              child: TopLeftLayOut(),
+              child: TopLeftLayout(),
             ),
             Positioned(
               top: MediaQuery.of(context).padding.top + 10 ,

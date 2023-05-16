@@ -69,6 +69,7 @@ class _UAWPageState extends State<UAWPage> {
           );
         },
         child: SafeArea(
+          minimum: const EdgeInsets.only(left: 0, right: 0, top: 0),
           child: Stack(
             children: [
               Container(
@@ -76,8 +77,8 @@ class _UAWPageState extends State<UAWPage> {
               ),
               Positioned(
                   top: screenHeight / 3.5,
-                  left: 0,
-                  right: 0,
+                  left: 15,
+                  width: screenWidth-30,
                   child: ListView(
                       shrinkWrap: true,
                       physics: const ClampingScrollPhysics(),
@@ -134,13 +135,12 @@ class _UAWPageState extends State<UAWPage> {
               Positioned(
                 top: MediaQuery.of(context).padding.top,
                 left: 0,
-                child: const TopLeftLayOut(),
+                child: const TopLeftLayout(),
               ),
               Positioned(
                 top: screenHeight / 8,
-                left: 0,
-                right: 0,
-                bottom: 0,
+                left: 15,
+                width: screenWidth-30,
                 child: CustomTable(
                   data: data,
                   hasHeader: false,

@@ -77,7 +77,7 @@ class _TCFPageState extends State<TCFPage> {
               Positioned(
                 top: MediaQuery.of(context).padding.top,
                 left: 0,
-                child: const TopLeftLayOut(),
+                child: const TopLeftLayout(),
               ),
               Positioned(
                 top: MediaQuery.of(context).padding.top + 20,

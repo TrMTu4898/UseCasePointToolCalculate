@@ -11,7 +11,7 @@ class MyBottomNavigationBarItem extends BottomNavigationBarItem {
     label: label,
     icon: Container(
       decoration: BoxDecoration(
-        color: isSelected  ? selectedColor : unselectedColor,
+        color: isSelected ? selectedColor : unselectedColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(

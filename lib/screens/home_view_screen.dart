@@ -16,14 +16,14 @@ class HomeViewScreen extends StatefulWidget {
   State<HomeViewScreen> createState() => _HomeViewScreenState();
 }
 
+int selectedIndex = 0;
 class _HomeViewScreenState extends State<HomeViewScreen> {
   bool _isFirstTimeUser = true;
-  var selectedIndex = 0;
+  bool screenIndex = true;
   @override
   void initState() {
     super.initState();
   }
-
   Future<void> _checkIfFirstTimeUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool isFirstTimeUser = prefs.getBool('first_time_user') ?? true;
@@ -37,61 +37,68 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<BottomNavigationBarItem> visibleItems = [
-      MyBottomNavigationBarItem(
-        label: 'Home',
-        icon: const Icon(
-          IconlyLight.home,
-          size: 25,
-        ),
-        selectedColor: Colors.blue,
-        unselectedColor: Colors.transparent,
-        isSelected: selectedIndex == 0,
-      ),
-      MyBottomNavigationBarItem(
-        label: 'Tool',
-        icon: const Icon(IconlyLight.work, size: 25),
-        selectedColor: Colors.blue,
-        unselectedColor: Colors.transparent,
-        isSelected: selectedIndex == 1,
-      ),
-      MyBottomNavigationBarItem(
-        label: 'History',
-        icon: const Icon(IconlyLight.document, size: 25),
-        selectedColor: Colors.blue,
-        unselectedColor: Colors.transparent,
-        isSelected: selectedIndex == 2,
-      ),
-      MyBottomNavigationBarItem(
-        label: 'Profile',
-        icon: const Icon(IconlyLight.profile, size: 25),
-        selectedColor: Colors.blue,
-        unselectedColor: Colors.transparent,
-        isSelected: selectedIndex == 3,
-      ),
-    ];
-final router = AutoRouter.of(context);
+    const Color selected = Color(0xff50C2C9);
+    final router = AutoRouter.of(context);
     return AutoTabsRouter.pageView(
       routes: const [
         HomeRoute(),
         UseCasePointRoute(),
         UseCasePointHistoryRoute(),
-        LogInRoute(),
+        ProfileRoute()
       ],
       builder: (context, child, _) {
         final tabsRouter = AutoTabsRouter.of(context);
         void onButtonSelected(int index) {
-          final tabsRouter = AutoTabsRouter.of(context);
           setState(() {
             selectedIndex = index;
+            screenIndex = tabsRouter.activeIndex == index;
           });
           tabsRouter.setActiveIndex(index);
         }
+
+        List<BottomNavigationBarItem> visibleItems = [
+          MyBottomNavigationBarItem(
+            label: 'Home',
+            icon: const Icon(
+              IconlyLight.home,
+              size: 25,
+            ),
+            selectedColor: selected,
+            unselectedColor: Colors.transparent,
+            isSelected: selectedIndex == 0,
+            //isScreen: screenIndex,
+          ),
+          MyBottomNavigationBarItem(
+            label: 'Tool',
+            icon: const Icon(IconlyLight.work, size: 25),
+            selectedColor: selected,
+            unselectedColor: Colors.transparent,
+            isSelected: selectedIndex == 1,
+            //isScreen: screenIndex,
+          ),
+          MyBottomNavigationBarItem(
+            label: 'History',
+            icon: const Icon(IconlyLight.document, size: 25),
+            selectedColor: selected,
+            unselectedColor: Colors.transparent,
+            isSelected: selectedIndex == 2,
+            //isScreen: screenIndex,
+          ),
+          MyBottomNavigationBarItem(
+            label: 'Profile',
+            icon: const Icon(IconlyLight.profile, size: 25),
+            selectedColor: selected,
+            unselectedColor: Colors.transparent,
+            isSelected: selectedIndex == 3,
+            //isScreen: screenIndex,
+          ),
+        ];
+
         return Scaffold(
           body: child,
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: tabsRouter.activeIndex,
-            selectedItemColor: const Color(0xff50C2C9),
+            selectedItemColor: Colors.white,
             unselectedItemColor: Colors.black,
             onTap: onButtonSelected,
             backgroundColor: Colors.white,

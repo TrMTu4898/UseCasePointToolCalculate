@@ -7,10 +7,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:usecasepointstool/bloc/authentication/authentication_bloc.dart';
 import 'package:usecasepointstool/data/repositories/person_repository.dart';
 import 'package:usecasepointstool/router/auto_router.gr.dart';
+import 'package:usecasepointstool/screens/home_view_screen.dart';
 import 'package:usecasepointstool/untillize/auth_validator.dart';
-import 'package:usecasepointstool/widgets/button/button_facebook.dart';
+import 'package:usecasepointstool/widgets/button/button_signin_with.dart';
 import 'package:usecasepointstool/widgets/button/button_forgot_password.dart';
-import 'package:usecasepointstool/widgets/button/button_google.dart';
 import 'package:usecasepointstool/widgets/button/button_signin.dart';
 import 'package:usecasepointstool/widgets/button/button_signup.dart';
 
@@ -74,8 +74,10 @@ class _LogInScreenState extends State<LogInScreen> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
-              // xử lý sự kiện khi người dùng click vào icon back
-              router.pop(true);
+              context.pushRoute(const HomeRoute());
+              setState(() {
+                selectedIndex = 0;
+              });
             },
           ),
           title: const Text(
@@ -110,8 +112,10 @@ class _LogInScreenState extends State<LogInScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 0, bottom: 10),
               child: Container(
-                child: const Image(
-                  image: AssetImage('assets/images/image8.png'),
+                child:  Image.asset(
+                      'assets/images/SignInfinal1.png',
+                    width: 246,
+                    height: 243,
                 ),
               ),
             ),
@@ -237,24 +241,35 @@ class _LogInScreenState extends State<LogInScreen> {
             ),
 
             // --------------------------Login With PassWord----------------------
-            GoogleButton(
-              onPressed: () {},
+            SignInWithButton(
+              typeSignIn: 'Google',
+              imagePath:'assets/images/google.png',
+              onPressed: (){
+              },
             ),
             const SizedBox(
               height: 8,
             ),
             // --------------------------LoginWith FaceBook----------------------
-            FacebookButton(onPressed: () {}),
+            SignInWithButton(
+              typeSignIn: 'Facebook',
+                imagePath: 'assets/images/facebook.png',
+                onPressed: () {}
+            ),
             const SizedBox(
               height: 8,
             ),
             SignUpButton(
-              onPressed: () {},
+              onPressed: () {
+                context.pushRoute(const RegisterRoute());
+              },
             ),
             const SizedBox(
               height: 8,
             ),
-            ForgotPasswordButton(onPressed: () {}),
+            ForgotPasswordButton(onPressed: () {
+              context.pushRoute(const ForgotPasswordRoute());
+            }),
             const SizedBox(
               height: 8,
             ),

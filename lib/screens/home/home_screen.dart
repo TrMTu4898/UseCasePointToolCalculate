@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:usecasepointstool/layout/top_left_layout.dart';
 import 'package:usecasepointstool/router/auto_router.gr.dart';
+import 'package:usecasepointstool/screens/home_view_screen.dart';
 import 'package:usecasepointstool/widgets/button/button_import.dart';
 import 'package:usecasepointstool/widgets/button/button_use_case_point.dart';
 
@@ -15,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final double screenWidth = size.width;
     final double screenHeight = size.height;
@@ -30,38 +31,43 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         shape: const ContinuousRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-          )
-        ),
+            borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        )),
+        leading: null,
+        backgroundColor: const Color(0xff50C2C9),
       ),
       body: SafeArea(
-        minimum:const EdgeInsets.only(left: 0,right: 0,top: 0),
+        minimum: const EdgeInsets.only(left: 0, right: 0, top: 0),
         child: Stack(
           children: [
             const Positioned(
-              top:0,
-              left:0,
-              child: TopLeftLayOut(),
+              top: 0,
+              left: 0,
+              child: TopLeftLayout(),
             ),
             Positioned(
-              top: screenHeight/25,
+              top: screenHeight / 25,
               width: screenWidth,
               child: Center(
                 child: UseCasePointButton(
-                      onPressed: (){
-                        context.pushRoute(const UseCasePointRoute());
-                      },
-                    ),
+                  onPressed: () {
+                    context.navigateTo(const UseCasePointRoute());
+                    final tabsRouter = AutoTabsRouter.of(context);
+                    setState(() {
+                      selectedIndex = 1;
+                    });
+                  },
                 ),
               ),
+            ),
             Positioned(
-              top: screenHeight/2.3,
+              top: screenHeight / 2.3,
               width: screenWidth,
               child: Center(
                 child: ImportButton(
-                  onPressed: (){
+                  onPressed: () {
                     context.pushRoute(const ImportRoute());
                   },
                 ),

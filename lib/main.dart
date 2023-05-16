@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp>{
     return MaterialApp.router(
         title: 'Use Case Points Tool',
         theme: ThemeData(
-            primaryColor: Colors.grey.shade200,
+            primaryColor: const Color(0xff50C2C9),
             brightness: Brightness.light,
             fontFamily: 'Roboto',
             cardTheme: CardTheme(

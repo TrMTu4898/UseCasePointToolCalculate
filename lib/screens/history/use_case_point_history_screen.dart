@@ -2,6 +2,8 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:flutter/material.dart';
 import 'package:usecasepointstool/layout/top_left_layout.dart';
+import 'package:usecasepointstool/router/auto_router.gr.dart';
+import 'package:usecasepointstool/screens/home_view_screen.dart';
 import 'package:usecasepointstool/widgets/widgets_screen/widget_hisroty_card.dart';
 
 @RoutePage()
@@ -41,6 +43,16 @@ class _UseCasePointHistoryScreenState extends State<UseCasePointHistoryScreen> {
             },
           ),
         ],
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+              onPressed: () {
+              context.pushRoute(const HomeRoute());
+              setState(() {
+              selectedIndex = 0;
+              });
+              },
+      ),
+        backgroundColor: const Color(0xff50C2C9),
       ),
       body: SafeArea(
         minimum: const EdgeInsets.only(left: 0, right: 0, top: 0),
@@ -49,7 +61,7 @@ class _UseCasePointHistoryScreenState extends State<UseCasePointHistoryScreen> {
             const Positioned(
               top: 0,
               left: 0,
-              child: TopLeftLayOut(),
+              child: TopLeftLayout(),
             ),
             Positioned(
               top: screenHeight / 30,

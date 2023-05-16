@@ -43,7 +43,7 @@ abstract class $AppRouter extends _i16.RootStackRouter {
     ForgotPasswordRoute.name: (routeData) {
       return _i16.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i1.ForgotPasswordPage(),
+        child: const _i1.ForgotPasswordScreen(),
       );
     },
     LogInRoute.name: (routeData) {
@@ -55,7 +55,7 @@ abstract class $AppRouter extends _i16.RootStackRouter {
     RegisterRoute.name: (routeData) {
       return _i16.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i3.RegisterPage(),
+        child: const _i3.RegisterScreen(),
       );
     },
     UseCasePointHistoryRoute.name: (routeData) {
@@ -162,7 +162,7 @@ class LogInRoute extends _i16.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i3.RegisterPage]
+/// [_i3.RegisterScreen]
 class RegisterRoute extends _i16.PageRouteInfo<void> {
   const RegisterRoute({List<_i16.PageRouteInfo>? children})
       : super(

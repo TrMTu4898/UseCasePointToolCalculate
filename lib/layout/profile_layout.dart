@@ -1,36 +1,35 @@
 import 'package:flutter/material.dart';
-
-class TopLeftLayout extends StatelessWidget {
-  const TopLeftLayout({super.key});
+class ProfileLayout extends StatelessWidget{
+  const ProfileLayout({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Stack(
       children: [
         Container(
-          width: 188,
-          height: 188,
+          width: 300,
+          height: 300,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(0),
           ),
         ),
         Positioned(
-          top: 0,
+          bottom: 0,
           left: 0,
-          width: 188,
-          height: 80,
+          width: 200,
+          height: 200,
           child: Image.asset(
-            'assets/images/layout_1.png',
+            'assets/images/Profile_Ellipse.png',
             fit: BoxFit.cover,
           ),
         ),
         Positioned(
           top: 0,
-          left: 0,
-          width: 100,
-          height: 171,
+          right: 0,
+          width: 200,
+          height: 200,
           child: Image.asset(
-            'assets/images/layout_2.png',
+            'assets/images/Profile_Ellipse.png',
             fit: BoxFit.cover,
           ),
         ),

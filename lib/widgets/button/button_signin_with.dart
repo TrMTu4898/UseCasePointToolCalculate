@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 
-class GoogleButton extends StatelessWidget{
+class SignInWithButton extends StatefulWidget {
   final void Function() onPressed;
-  const GoogleButton({
-    super.key,
+  final String typeSignIn;
+  final String imagePath;
+  const SignInWithButton({
+    Key? key,
     required this.onPressed,
-  });
+    required this.imagePath,
+    required this.typeSignIn,
+  }) : super(key: key);
+
   @override
-  Widget build(BuildContext context){
+  _SignInWithButtonState createState() => _SignInWithButtonState();
+}
+
+class _SignInWithButtonState extends State<SignInWithButton> {
+  @override
+  Widget build(BuildContext context) {
     return ElevatedButton(
         style: ButtonStyle(
           padding: MaterialStateProperty.all<EdgeInsets>(
@@ -21,19 +31,19 @@ class GoogleButton extends StatelessWidget{
           ),
           minimumSize: MaterialStateProperty.all<Size>(const Size(328, 48)),
         ),
-        onPressed: onPressed,
+        onPressed: widget.onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
+          children: [
             Image(
-              image: AssetImage('assets/images/google.png'),
+              image: AssetImage(widget.imagePath),
             ),
-            SizedBox(
+            const SizedBox(
               width: 4,
             ),
             Text(
-              'Google',
-              style: TextStyle(color: Color(0xFF333333)),
+              widget.typeSignIn,
+              style: const TextStyle(color: Color(0xFF333333)),
             )
           ],
         ));
