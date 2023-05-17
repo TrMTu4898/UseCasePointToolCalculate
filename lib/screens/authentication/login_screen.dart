@@ -26,7 +26,7 @@ class _LogInScreenState extends State<LogInScreen> {
   final _emailController = TextEditingController(text: "");
   final _passWordController = TextEditingController(text: "");
 
-  @override
+
   String? _email;
   String? _passWord;
   bool _obscureText = true;
@@ -58,6 +58,12 @@ class _LogInScreenState extends State<LogInScreen> {
     } else if (validatePassWord != null) {
       EasyLoading.showError(validatePassWord);
       return;
+    }else{
+      authenticationBloc.add(
+          LogInRequested(
+              email:_email.toString() ,
+              password:_passWord.toString()
+          ));
     }
     // code is here
     EasyLoading.dismiss();
@@ -98,182 +104,182 @@ class _LogInScreenState extends State<LogInScreen> {
         backgroundColor: const Color(0xFFF5F5F5),
         body: SafeArea(
           minimum: const EdgeInsets.only(left: 17, right: 17),
-          child: Column(children: <Widget>[
-            // Padding(
-            //   padding: EdgeInsets.only(top: 40, bottom: 30),
-            //   child: Container(
-            //     child: Center(
-            //         child: Text(
-            //       'SIGN IN',
-            //       style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
-            //     )),
-            //   ),
-            // ),
-            Padding(
-              padding: const EdgeInsets.only(top: 0, bottom: 10),
-              child: Container(
-                child:  Image.asset(
+          child: ListView(
+            children: [
+              Column(children: <Widget>[
+                // Padding(
+                //   padding: EdgeInsets.only(top: 40, bottom: 30),
+                //   child: Container(
+                //     child: Center(
+                //         child: Text(
+                //       'SIGN IN',
+                //       style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+                //     )),
+                //   ),
+                // ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 0, bottom: 10),
+                  child: Container(
+                    child:  Image.asset(
                       'assets/images/SignInfinal1.png',
-                    width: 246,
-                    height: 243,
-                ),
-              ),
-            ),
-            // --------------------------UserName----------------------
-            Padding(
-              padding: const EdgeInsets.only(top: 0, bottom: 10),
-              child: Container(
-                // decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(5),
-                //     border: Border.all(color: Colors.red)),
-
-                child: TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  onChanged: (value) => setState(() {
-                    _email = value;
-                  }),
-                  validator: (value) => Validator.validateEmail(email: value),
-                  decoration: InputDecoration(
-                    filled: true,
-                    hintText: 'Email ',
-                    prefixIcon: const Icon(
-                      Icons.person,
-                      color: Color(0xff50C2C9),
+                      width: 246,
+                      height: 243,
                     ),
-                    fillColor: const Color.fromARGB(255, 250, 252, 255),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(50)),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xff50C2C9),
-                        width: 2,
-                      ),
-                    ),
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
                   ),
                 ),
-              ),
-            ),
-            // --------------------------PassWord----------------------
-            Padding(
-              padding: const EdgeInsets.only(top: 0, bottom: 10),
-              child: Container(
-                child: TextFormField(
-                  // validator: (value) =>_validator ,
-                  controller: _passWordController,
-                  keyboardType: TextInputType.visiblePassword,
-                  validator: (value) =>
-                      Validator.validatePassword(password: value),
-                  onChanged: (value) => setState(() {
-                    _passWord = value;
-                  }),
-                  obscureText: _obscureText,
-                  decoration: InputDecoration(
-                    filled: true,
-                    hintText: 'Password',
-                    prefixIcon: const Icon(
-                      Icons.key,
-                      color: Color(0xff50C2C9),
+                // --------------------------UserName----------------------
+                Padding(
+                  padding: const EdgeInsets.only(top: 0, bottom: 10),
+                  child: Container(
+                    // decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(5),
+                    //     border: Border.all(color: Colors.red)),
+
+                    child: TextFormField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      onChanged: (value) => setState(() {
+                        _email = value;
+                      }),
+                      validator: (value) => Validator.validateEmail(email: value),
+                      decoration: InputDecoration(
+                        filled: true,
+                        hintText: 'Email ',
+                        prefixIcon: const Icon(
+                          Icons.person,
+                          color: Color(0xff50C2C9),
+                        ),
+                        fillColor: const Color.fromARGB(255, 250, 252, 255),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(50)),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xff50C2C9),
+                            width: 2,
+                          ),
+                        ),
+                        contentPadding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                      ),
                     ),
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
+                  ),
+                ),
+                // --------------------------PassWord----------------------
+                Padding(
+                  padding: const EdgeInsets.only(top: 0, bottom: 10),
+                  child: Container(
+                    child: TextFormField(
+                      // validator: (value) =>_validator ,
+                      controller: _passWordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      validator: (value) =>
+                          Validator.validatePassword(password: value),
+                      onChanged: (value) => setState(() {
+                        _passWord = value;
+                      }),
+                      obscureText: _obscureText,
+                      decoration: InputDecoration(
+                        filled: true,
+                        hintText: 'Password',
+                        prefixIcon: const Icon(
+                          Icons.key,
+                          color: Color(0xff50C2C9),
+                        ),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                          child: Icon(
+                            _obscureText ? Icons.visibility : Icons.visibility_off,
+                            color: const Color(0xff50C2C9),
+                          ),
+                        ),
+                        fillColor: const Color.fromARGB(255, 250, 252, 255),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(50)),
+                        focusedBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Color(0xff50C2C9),
+                            width: 2,
+                          ),
+                        ),
+                        contentPadding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
+                      ),
+                    ),
+                  ),
+                ),
+                // --------------------------Login----------------------
+                BlocBuilder<AuthenticationBloc,AuthenticationState>(
+                  builder: (context, state){
+                    if(state is AuthenticationLoading){
+                      return const CircularProgressIndicator();
+                    }else if( state is AuthenticationUnauthenticated){
+                      Fluttertoast.showToast(
+                          msg: "Login unsuccessful!!",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.red,
+                          textColor: Colors.white,
+                          fontSize: 16.0);
+                    } return SignInButton(
+                      onPressed: () {
+                        login(context);
+
+                        context.pushRoute(const HomeViewRoute());
                       },
-                      child: Icon(
-                        _obscureText ? Icons.visibility : Icons.visibility_off,
-                        color: const Color(0xff50C2C9),
-                      ),
-                    ),
-                    fillColor: const Color.fromARGB(255, 250, 252, 255),
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(50)),
-                    focusedBorder: const OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Color(0xff50C2C9),
-                        width: 2,
-                      ),
-                    ),
-                    contentPadding:
-                        const EdgeInsets.symmetric(vertical: 0, horizontal: 20),
-                  ),
-                ),
-              ),
-            ),
-            // --------------------------Login----------------------
-            BlocBuilder<AuthenticationBloc,AuthenticationState>(
-              builder: (context, state){
-                if(state is AuthenticationLoading){
-                  return const CircularProgressIndicator();
-            }else if( state is AuthenticationUnauthenticated){
-                  Fluttertoast.showToast(
-                      msg: "Login unsuccessful!!",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0);
-                } return SignInButton(
-                  onPressed: () {
-                    login(context);
-                    authenticationBloc.add(
-                        LogInRequested(
-                            email:_email.toString() ,
-                            password:_passWord.toString()
-                        ));
-                    context.pushRoute(const HomeViewRoute());
+                    );
                   },
-                );
-            },
 
-            ),
-            
+                ),
 
-            // --------------------------Forgot passWord----------------------
-            const SizedBox(
-              height: 15,
-            ),
 
-            // --------------------------Login With PassWord----------------------
-            SignInWithButton(
-              typeSignIn: 'Google',
-              imagePath:'assets/images/google.png',
-              onPressed: (){
-              },
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            // --------------------------LoginWith FaceBook----------------------
-            SignInWithButton(
-              typeSignIn: 'Facebook',
-                imagePath: 'assets/images/facebook.png',
-                onPressed: () {}
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            SignUpButton(
-              onPressed: () {
-                context.pushRoute(const RegisterRoute());
-              },
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            ForgotPasswordButton(onPressed: () {
-              context.pushRoute(const ForgotPasswordRoute());
-            }),
-            const SizedBox(
-              height: 8,
-            ),
-          ]),
+                // --------------------------Forgot passWord----------------------
+                const SizedBox(
+                  height: 15,
+                ),
+
+                // --------------------------Login With PassWord----------------------
+                SignInWithButton(
+                  typeSignIn: 'Google',
+                  imagePath:'assets/images/google.png',
+                  onPressed: (){
+                  },
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                // --------------------------LoginWith FaceBook----------------------
+                SignInWithButton(
+                    typeSignIn: 'Facebook',
+                    imagePath: 'assets/images/facebook.png',
+                    onPressed: () {}
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                SignUpButton(
+                  onPressed: () {
+                    context.pushRoute(const RegisterRoute());
+                  },
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                ForgotPasswordButton(onPressed: () {
+                  context.pushRoute(const ForgotPasswordRoute());
+                }),
+                const SizedBox(
+                  height: 8,
+                ),
+              ]),
+            ],
+          )
         ),
       ),
     );

@@ -71,6 +71,7 @@ class _MyAppState extends State<MyApp>{
         ),
       routerConfig: _appRouter.config(),
       builder: EasyLoading.init(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

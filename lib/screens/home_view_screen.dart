@@ -44,7 +44,8 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
         HomeRoute(),
         UseCasePointRoute(),
         UseCasePointHistoryRoute(),
-        ProfileRoute()
+        //ProfileRoute(),
+        LogInRoute(),
       ],
       builder: (context, child, _) {
         final tabsRouter = AutoTabsRouter.of(context);

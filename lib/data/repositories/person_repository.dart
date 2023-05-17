@@ -25,6 +25,7 @@ class PersonRepository {
               email: firebaseUser.email ?? '',
               displayName: firebaseUser.displayName ?? '',
               photoUrl: firebaseUser.photoURL ?? '',
+              phoneNumber: firebaseUser.phoneNumber ?? '',
             ));
     });
   }
@@ -84,7 +85,9 @@ class PersonRepository {
           fullName: currentUser.displayName ?? '',
           email: currentUser.email ?? '',
           displayName: currentUser.displayName ?? '',
-          photoUrl: currentUser.photoURL ?? '');
+          photoUrl: currentUser.photoURL ?? '',
+          phoneNumber: currentUser.phoneNumber??'',
+      );
     } else {
       return null;
     }
