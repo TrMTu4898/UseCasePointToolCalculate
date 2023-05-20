@@ -101,7 +101,7 @@ class _LogInScreenState extends State<LogInScreen> {
           ),
         ),
         resizeToAvoidBottomInset: false,
-        backgroundColor: const Color(0xFFF5F5F5),
+        backgroundColor: const Color(0xFFEEEEEE),
         body: SafeArea(
           minimum: const EdgeInsets.only(left: 17, right: 17),
           child: ListView(
@@ -230,8 +230,10 @@ class _LogInScreenState extends State<LogInScreen> {
                     } return SignInButton(
                       onPressed: () {
                         login(context);
-
                         context.pushRoute(const HomeViewRoute());
+                        setState(() {
+                          selectedIndex=0;
+                        });
                       },
                     );
                   },

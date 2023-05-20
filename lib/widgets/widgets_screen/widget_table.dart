@@ -1,117 +1,100 @@
 import 'package:flutter/material.dart';
 
-class CustomTable extends StatelessWidget {
+class WidgetTable extends StatelessWidget {
   final List<List<String>> data;
-  final bool hasHeader;
+  final List<String> header;
 
-  const CustomTable({Key? key, required this.data, this.hasHeader = true})
-      : super(key: key);
+  const WidgetTable({Key? key, required this.data, required this.header});
 
   @override
   Widget build(BuildContext context) {
-    List<TableRow> rows = data
-        .asMap()
-        .map((index, row) {
-      return MapEntry(
-          index,
-          TableRow(
-            decoration: BoxDecoration(
-              color: (index == 0 )
-                  ? const Color(0xFF50C2C9)
-                  : null,
-            ),
-            children: [
-              for (final cell in row)
-                TableCell(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: (index == 0 || row.indexOf(cell) == 0)
-                          ? const Color.fromARGB(0, 0, 0, 0)
-                          : null,
-                    ),
-                    child: Center(
-                      child: Text(cell),
-                    ),
-                  ),
-                ),
-            ],
-          ));
-    })
-        .values
-        .toList();
-    return Table(
-      border: TableBorder.all(
-        borderRadius: BorderRadius.circular(10.0),
+    double radiusCircular = 10.0;
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radiusCircular), // Rounded corners
       ),
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      defaultColumnWidth: const IntrinsicColumnWidth(),
-      columnWidths: const <int, TableColumnWidth>{
-        0: FlexColumnWidth(),
-        1: FlexColumnWidth(),
-        2: FlexColumnWidth(),
-        3: FlexColumnWidth(),
-        4: FlexColumnWidth(),
-      },
-      children: [
-        if (hasHeader)
-          const TableRow(
-            decoration: BoxDecoration(
-              color: Color(0xFF50C2C9),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
+      child: Column(
+
+        children: [
+          buildHeaderRow(),
+          buildDataRow(),
+        ],
+      ),
+    );
+  }
+
+  Widget buildHeaderRow() {
+    double radiusCircular = 10.0;
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF50C2C9), // Background color of the header row
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(radiusCircular),
+          topRight: Radius.circular(radiusCircular),
+          bottomRight: Radius.circular(radiusCircular),
+          bottomLeft: Radius.circular(radiusCircular),
+        ),
+      ),
+      child: Row(
+        children: header.asMap().entries.map((entry) {
+          int index = entry.key;
+          String columnName = entry.value;
+          double? columnWidth = index == 2 ? 25 : null; // Set width for column 2
+
+          return Expanded(
+            flex: index == 2 ? 0 : 1, // Allow column 2 to take its fixed width, let others expand
+            child: Container(
+              alignment: Alignment.center,
+              width: columnWidth,
+              padding: const EdgeInsets.all(0.0),
+              child: Text(
+                columnName,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
               ),
             ),
-            children: [
-              TableCell(
-                child: Center(
-                  child: Text(
-                    'Header 1',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                    textAlign: TextAlign.center,
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget buildDataRow() {
+    return Column(
+      children: data.map((rowData) {
+        int rowIndex = data.indexOf(rowData);
+        bool isDividerVisible = rowIndex == 2;
+
+        return Row(
+          children: rowData.asMap().entries.map((entry) {
+            int index = entry.key;
+            String cellData = entry.value;
+            double? columnWidth = index == 2 ? 50.0 : null; // Set width for column 2
+
+            return Expanded(
+              flex: index == 2 ? 0 : 1, // Allow column 2 to take its fixed width, let others expand
+              child: Container(
+                alignment: Alignment.center,
+                width: columnWidth,
+                padding: const EdgeInsets.all(5.0),
+                decoration: BoxDecoration(
+                  border: isDividerVisible ? const Border(bottom: BorderSide(color: Color(0xFFD9D9D9))) : null,
+                ),
+                child: Text(
+                  cellData,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              TableCell(
-                child: Center(
-                  child: Text(
-                    'Header 2',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              TableCell(
-                child: Center(
-                  child: Text(
-                    'Header 3',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              TableCell(
-                child: Center(
-                  child: Text(
-                    'Header 4',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-              TableCell(
-                child: Center(
-                  child: Text(
-                    'Header 5',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ...rows,
-      ],
+            );
+          }).toList(),
+        );
+      }).toList(),
     );
   }
 }

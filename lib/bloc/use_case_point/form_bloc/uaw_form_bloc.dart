@@ -4,6 +4,9 @@ class UAWFormBloc extends FormBloc<String, String> {
   final simpleActors = TextFieldBloc();
   final averageActors = TextFieldBloc();
   final complexActors = TextFieldBloc();
+  int get simpleActorsValue => simpleActors.value.isNotEmpty ? int.parse(simpleActors.value) : 0;
+  int get averageActorsValue => averageActors.value.isNotEmpty ? int.parse(averageActors.value) : 0;
+  int get complexActorsValue => complexActors.value.isNotEmpty ? int.parse(complexActors.value) : 0;
 
   UAWFormBloc({required this.useCasePointBloc}) {
     addFieldBlocs(fieldBlocs: [

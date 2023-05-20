@@ -10,7 +10,8 @@ import 'package:usecasepointstool/widgets/widgets_screen/widget_profile.dart';
 
 @RoutePage()
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final String currentUser;
+  const ProfileScreen({Key? key, required this.currentUser}) : super(key: key);
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -33,11 +34,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     photoUrl: '',
     phoneNumber: '',
   ));
- final String _fullName = 'Tran Minh Tu';
- final String _displayName = 'Tran Minh Tu';
- final String _email = 'minhtu04081998.work@gmail.com';
- final String _photoUrl='assets/images/Profile_Image.jpg';
- final String _phoneNumber = '0342769724';
+  final String _fullName = 'Tran Minh Tu';
+  final String _displayName = 'Tran Minh Tu';
+  final String _email = 'minhtu04081998.work@gmail.com';
+  final String _photoUrl = 'assets/images/Profile_Image.jpg';
+  final String _phoneNumber = '0342769724';
 
   @override
   void initiState() {
@@ -69,8 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: const Color(0xff50C2C9),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-            },
+            onPressed: () {},
           ),
           title: const Text(
             'Profile',
@@ -99,8 +99,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ProfileLayout(),
                   ),
                 ),
-                 Positioned(
-                  top: screenHeight/1.6,
+                Positioned(
+                  top: screenHeight / 1.6,
                   right: 0,
                   left: 0,
                   child: const Center(
@@ -111,58 +111,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Positioned(
                   top: 50,
                   left: 15,
-                  width: screenWidth-30,
-                  height: screenHeight/1.5,
+                  width: screenWidth - 30,
+                  height: screenHeight / 1.5,
                   child: WidgetProfile(
                     emailTextController: _emailController,
-                            displayNameTextController: _displayNameController,
-                            photoUrlTextController: _photoUrlController,
-                            fullNameTextController: _fullNameController,
-                            phoneNumberTextController: _phoneNumberController,
-                            email: _email,
-                            displayName: _displayName,
-                            photoURL: _photoUrl,
-                            fullName: _fullName,
-                            isEditing: isEditing,
-                            phoneNumber: _phoneNumber,
+                    displayNameTextController: _displayNameController,
+                    photoUrlTextController: _photoUrlController,
+                    fullNameTextController: _fullNameController,
+                    phoneNumberTextController: _phoneNumberController,
+                    email: _email,
+                    displayName: _displayName,
+                    photoURL: _photoUrl,
+                    fullName: _fullName,
+                    isEditing: isEditing,
+                    phoneNumber: _phoneNumber,
                   ),
                 ),
-
-                // Positioned(
-                //   top: 50,
-                //   left: 15,
-                //   child: ButtonProfile(
-                //     title: 'Edit Profile',
-                //     onPressed: () {
-                //     },
-                //     backgroundColor: const Color(0xFF3D405B),
-                //     textColor: Colors.white,
-                //   ),
-                  // BlocBuilder<ProfileBloc, ProfileState>(
-                  //     builder: (context, state) {
-                  //       if (state is ProfileViewState) {
-                  //         isEditing = false;
-                  //       } else if (state is ProfileEditState) {
-                  //         isEditing = false;
-                  //       }
-                  //       return WidgetProfile(
-                  //         emailTextController: _emailController,
-                  //         displayNameTextController: _displayNameController,
-                  //         photoUrlTextController: _photoUrlController,
-                  //         fullNameTextController: _fullNameController,
-                  //         phoneNumberTextController: _phoneNumberController,
-                  //         email: _email,
-                  //         displayName: _displayName,
-                  //         photoURL: _photoUrl,
-                  //         fullName: _fullName,
-                  //         isEditing: isEditing,
-                  //         phoneNumber: _phoneNumber,
-                  //         onPressedEditProfile:onPressedEditProfile,
-                  //       onPressedLogOut:,
-                  //       );
-                  //     },
-                  //   ),
-                //),
                 /*---------------------Widget-------------------------*/
               ],
             )),

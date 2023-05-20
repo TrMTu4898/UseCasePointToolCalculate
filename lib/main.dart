@@ -2,13 +2,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:usecasepointstool/bloc/authentication/authentication_bloc.dart';
 import 'package:usecasepointstool/bloc/use_case_point/use_case_points_bloc.dart';
+import 'package:usecasepointstool/data/repositories/person_repository.dart';
 import 'package:usecasepointstool/firebase_options.dart';
 import 'package:usecasepointstool/router/auto_router.dart';
 import 'package:usecasepointstool/widgets/button/bottom_navigation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() async {
+  PersonRepository personRepository = PersonRepository();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -16,12 +19,12 @@ void main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        Provider<UseCasePointBloc>(
+        BlocProvider<UseCasePointBloc>(
           create:(_) => UseCasePointBloc(),
         ),
-        // BlocProvider<UseCasePointsFormBloc>(
-        //   create:(_) => UseCasePointsFormBloc(useCasePointBloc: UseCasePointBloc()),
-        // ),
+        BlocProvider<AuthenticationBloc>(
+          create: (_)=> AuthenticationBloc(personRepository: personRepository),
+        ),
       ],
       child: const MyApp(),
     ),

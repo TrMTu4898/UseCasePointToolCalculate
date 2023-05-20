@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
-import 'package:usecasepointstool/bloc/profile_bloc/profile_bloc.dart';
 import 'package:usecasepointstool/router/auto_router.gr.dart';
 import 'package:usecasepointstool/screens/home_view_screen.dart';
 import 'package:usecasepointstool/widgets/button/button_profile.dart';
+import 'package:usecasepointstool/widgets/button/button_widget.dart';
 import 'package:usecasepointstool/widgets/text/text_editing.dart';
+import 'package:usecasepointstool/data/repositories/person_repository.dart';
 
 class WidgetProfile extends StatefulWidget {
   final TextEditingController emailTextController;
@@ -42,6 +42,7 @@ class WidgetProfile extends StatefulWidget {
 
 class _WidgetProfile extends State<WidgetProfile> {
   bool isEditing = false;
+  PersonRepository personRepository = PersonRepository();
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -127,9 +128,7 @@ class _WidgetProfile extends State<WidgetProfile> {
             ),
             ButtonProfile(
               title: 'Edit Profile',
-              onPressed: () {
-
-              },
+              onPressed: () {},
               backgroundColor: const Color(0xFF3D405B),
               textColor: Colors.white,
             ),
@@ -185,7 +184,10 @@ class _WidgetProfile extends State<WidgetProfile> {
                   width: 20,
                 ),
                 Expanded(
-                    child: ButtonProfile(
+                    child: ButtonWidget(
+                  sizeButton: Size(screenWidth / 2.5, screenHeight / 22),
+                  textSize: 18,
+                  radiusCircular: 24,
                   title: 'Home',
                   backgroundColor: Colors.white,
                   textColor: Colors.black,
@@ -200,12 +202,22 @@ class _WidgetProfile extends State<WidgetProfile> {
                   width: 15,
                 ),
                 Expanded(
-                    child: ButtonProfile(
-                  title: 'LogOut',
-                  backgroundColor: Colors.white,
-                  textColor: Colors.black,
-                  onPressed: () {},
-                )),
+                    child: ButtonWidget(
+                      sizeButton: Size(screenWidth / 2.5, screenHeight / 22),
+                      textSize: 18,
+                      radiusCircular: 24,
+                      title: 'LogOut',
+                      backgroundColor: Colors.white,
+                      textColor: Colors.black,
+                      onPressed: () {
+                        personRepository.signOut().then((_) {
+                          // Xử lý sau khi đăng xuất thành công (nếu cần)
+                          print('Thanh Cong');
+                    }).catchError((error) {
+                         // print(error);
+                    });
+                      },
+                    )),
                 const SizedBox(
                   width: 30,
                 ),

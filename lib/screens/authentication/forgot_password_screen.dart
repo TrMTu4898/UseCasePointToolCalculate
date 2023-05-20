@@ -37,7 +37,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     final router = AutoRouter.of(context);
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: const Color(0xFFEEEEEE),
       appBar: AppBar(
         backgroundColor: const Color(0xff50C2C9),
         leading: IconButton(
