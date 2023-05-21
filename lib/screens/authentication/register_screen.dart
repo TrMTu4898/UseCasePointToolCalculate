@@ -4,17 +4,18 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:usecasepointstool/bloc/authentication/authentication_bloc.dart';
 
-import 'package:url_launcher/url_launcher.dart';
-import 'package:usecasepointstool/data/repositories/person_repository.dart';
-import 'package:usecasepointstool/router/auto_router.gr.dart';
-import 'package:usecasepointstool/untillize/auth_validator.dart';
-import 'package:usecasepointstool/widgets/button/button_create_account.dart';
-import 'package:usecasepointstool/widgets/button/text_button_signin.dart';
+import '../../data/repositories/person_repository.dart';
+import '../../router/auto_router.gr.dart';
+import '../../untillize/auth_validator.dart';
+import '../../widgets/button/button_create_account.dart';
+import '../../widgets/button/text_button_signin.dart';
 
 @RoutePage()
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  final AuthenticationBloc authenticationBloc;
+  const RegisterScreen({super.key, required this.authenticationBloc});
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -355,8 +356,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 CreateAccouuntButton(
                   onPressed: (){
                     register(context);
-                    signUp();
-                    //personRepository.signOut();
                   },
                 ),
                 // --------------------------Forgot passWord----------------------
@@ -365,7 +364,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 TextButtonSignIn(
                   onTap: (){
-                    context.pushRoute(const LogInRoute());
+                    context.pushRoute( LogInRoute(authenticationBloc: widget.authenticationBloc));
                   },
                 )
               ],

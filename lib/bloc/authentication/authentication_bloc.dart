@@ -48,7 +48,8 @@ class AuthenticationBloc
       final Person user = (await _personRepository.signIn(email: event.email, password: event.password)) as Person;
       Fluttertoast.showToast(msg: 'Login success');
       emit(AuthenticationAuthenticated(user: user));
-    }catch(_){
+    }catch(e){
+      print('error$e');
       emit(const AuthenticationUnauthenticated(error: "Login unsuccessful!!"));
     }
 

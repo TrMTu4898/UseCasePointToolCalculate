@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:usecasepointstool/router/auto_router.gr.dart';
+import 'package:usecasepointstool/screens/authentication/login_screen.dart';
 import 'package:usecasepointstool/screens/home_view_screen.dart';
 import 'package:usecasepointstool/widgets/button/button_profile.dart';
 import 'package:usecasepointstool/widgets/button/button_widget.dart';
@@ -211,8 +212,10 @@ class _WidgetProfile extends State<WidgetProfile> {
                       textColor: Colors.black,
                       onPressed: () {
                         personRepository.signOut().then((_) {
-                          // Xử lý sau khi đăng xuất thành công (nếu cần)
-                          print('Thanh Cong');
+                          context.pushRoute(const HomeRoute());
+                          isAuthentication = false;
+                          selectedIndex=0;
+                      print('Thanh Cong');
                     }).catchError((error) {
                          // print(error);
                     });

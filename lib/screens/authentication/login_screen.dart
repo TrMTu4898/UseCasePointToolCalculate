@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:usecasepointstool/bloc/authentication/authentication_bloc.dart';
-import 'package:usecasepointstool/data/repositories/person_repository.dart';
-import 'package:usecasepointstool/router/auto_router.gr.dart';
-import 'package:usecasepointstool/screens/home_view_screen.dart';
-import 'package:usecasepointstool/untillize/auth_validator.dart';
+import '../../bloc/authentication/authentication_bloc.dart';
+import '../../data/repositories/person_repository.dart';
+import '../../router/auto_router.gr.dart';
+import '../home_view_screen.dart';
+import '../../untillize/auth_validator.dart';
 import 'package:usecasepointstool/widgets/button/button_signin_with.dart';
 import 'package:usecasepointstool/widgets/button/button_forgot_password.dart';
 import 'package:usecasepointstool/widgets/button/button_signin.dart';
@@ -16,12 +16,14 @@ import 'package:usecasepointstool/widgets/button/button_signup.dart';
 
 @RoutePage()
 class LogInScreen extends StatefulWidget {
-  const LogInScreen({super.key});
+  final AuthenticationBloc authenticationBloc;
+  const LogInScreen({super.key, required this.authenticationBloc});
 
   @override
   State<LogInScreen> createState() => _LogInScreenState();
 }
 
+bool isAuthentication = false;
 class _LogInScreenState extends State<LogInScreen> {
   final _emailController = TextEditingController(text: "");
   final _passWordController = TextEditingController(text: "");
@@ -32,11 +34,8 @@ class _LogInScreenState extends State<LogInScreen> {
   bool _obscureText = true;
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  final authenticationBloc =
-      AuthenticationBloc(personRepository: PersonRepository());
   @override
   void dispose() {
-    authenticationBloc.close();
     super.dispose();
   }
 
@@ -59,11 +58,16 @@ class _LogInScreenState extends State<LogInScreen> {
       EasyLoading.showError(validatePassWord);
       return;
     }else{
-      authenticationBloc.add(
+      isAuthentication = true;
+      widget.authenticationBloc.add(
           LogInRequested(
               email:_email.toString() ,
               password:_passWord.toString()
           ));
+      context.pushRoute(const HomeViewRoute());
+      setState(() {
+        selectedIndex=0;
+      });
     }
     // code is here
     EasyLoading.dismiss();
@@ -73,7 +77,7 @@ class _LogInScreenState extends State<LogInScreen> {
   Widget build(BuildContext context) {
     final router = AutoRouter.of(context);
     return BlocProvider(
-      create: (context) => authenticationBloc,
+      create: (context) => widget.authenticationBloc,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xff50C2C9),
@@ -215,6 +219,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 ),
                 // --------------------------Login----------------------
                 BlocBuilder<AuthenticationBloc,AuthenticationState>(
+                  bloc: widget.authenticationBloc,
                   builder: (context, state){
                     if(state is AuthenticationLoading){
                       return const CircularProgressIndicator();
@@ -230,10 +235,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     } return SignInButton(
                       onPressed: () {
                         login(context);
-                        context.pushRoute(const HomeViewRoute());
-                        setState(() {
-                          selectedIndex=0;
-                        });
+
                       },
                     );
                   },
@@ -267,7 +269,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 ),
                 SignUpButton(
                   onPressed: () {
-                    context.pushRoute(const RegisterRoute());
+                    context.pushRoute( RegisterRoute(authenticationBloc: widget.authenticationBloc));
                   },
                 ),
                 const SizedBox(

@@ -25,8 +25,8 @@ class _UseCasePointScreenState extends State<UseCasePointScreen> {
 
     return AutoTabsRouter.pageView(
       routes: [
-        UUCPRoute(
-            useCasePointBloc: useCasePointBloc, uucpFormBloc: uucpFormBloc),
+        UUCWRoute(
+            useCasePointBloc: useCasePointBloc, uucwFormBloc: uucpFormBloc),
         UAWRoute(useCasePointBloc: useCasePointBloc, uawFormBloc: uawFormBloc),
         TCFRoute(useCasePointBloc: useCasePointBloc, tcfFormBloc: tcfFormBloc),
         ECFRoute(useCasePointBloc: useCasePointBloc, ecfFormBloc: ecfFormBloc),

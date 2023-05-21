@@ -51,13 +51,11 @@ dependencies:
   provider: ^6.0.5
   form_bloc: ^0.30.0
   flutter_form_bloc: ^0.30.1
-  shared_preferences: ^2.1.1
   flutter_easyloading: ^3.0.5
   dropdown_button2: ^2.1.2
   fluttertoast: ^8.2.1
   boxicons: ^2.1.3
   flutter_iconly: ^1.0.2
-  url_launcher: ^6.1.11
   syncfusion_flutter_datagrid: ^21.2.5
 
 dev_dependencies:

@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logging/logging.dart';
-import 'package:usecasepointstool/data/models/person.dart';
+import '../models/person.dart';
 
 class PersonRepository {
   final FirebaseAuth _firebaseAuth;
@@ -49,22 +49,32 @@ class PersonRepository {
     }
   }
 
-  Future<User?> signIn({
+  Future<Person?> signIn({
     required String email,
     required String password,
   }) async {
     try {
       final UserCredential userCredential =
-          await _firebaseAuth.signInWithEmailAndPassword(
+      await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return userCredential.user;
+      final User user = userCredential.user!;
+      final Person person = Person(
+        uid: user.uid,
+        fullName: user.displayName ?? '',
+        email: user.email ?? '',
+        displayName: user.displayName ?? '',
+        photoUrl: user.photoURL ?? '',
+        phoneNumber: user.phoneNumber ?? '',
+      );
+      return person;
     } catch (e, stackTrace) {
       _logger.severe('Failed to sign in user:', e, stackTrace);
       return null;
     }
   }
+
 
   Future<Future<List<void>>> signOut() async {
     return Future.wait([

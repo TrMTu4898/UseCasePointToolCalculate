@@ -11,11 +11,13 @@ import 'package:usecasepointstool/widgets/button/bottom_navigation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() async {
-  PersonRepository personRepository = PersonRepository();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  PersonRepository personRepository = PersonRepository();
+
+
   runApp(
     MultiBlocProvider(
       providers: [

@@ -41,3 +41,13 @@ class Unauthenticated extends AuthenticationState {
   @override
   List<Object?> get props => [];
 }
+
+class IsAuthenticationState {
+  final bool isAuthenticated;
+  final Person user;
+
+  IsAuthenticationState({required this.isAuthenticated, required this.user});
+
+  @override
+  List<Object?> get props => [isAuthenticated];
+}
