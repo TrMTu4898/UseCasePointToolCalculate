@@ -18,6 +18,10 @@ class AuthenticationBloc
     on<AppStarted>(_onAppStarted);
     on<LogInRequested>(_onLogInRequested);
     on<LogoutRequested>(_onLogoutRequested);
+    on<ClickButtonEvent>((event, emit) {
+      emit(ClickButton());
+    }
+    );
   }
   Future<void> _onAppStarted(
       AppStarted event, Emitter<AuthenticationState> emit)
@@ -60,4 +64,5 @@ class AuthenticationBloc
       await _personRepository.signOut();
       emit(Unauthenticated());
   }
+
 }

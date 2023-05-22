@@ -1,38 +1,45 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_bloc/flutter_form_bloc.dart';
-import 'package:provider/provider.dart';
-import 'package:usecasepointstool/bloc/authentication/authentication_bloc.dart';
-import 'package:usecasepointstool/bloc/use_case_point/use_case_points_bloc.dart';
-import 'package:usecasepointstool/data/repositories/person_repository.dart';
-import 'package:usecasepointstool/firebase_options.dart';
-import 'package:usecasepointstool/router/auto_router.dart';
-import 'package:usecasepointstool/widgets/button/bottom_navigation.dart';
+import 'bloc/authentication/authentication_bloc.dart';
+import 'bloc/use_case_point/use_case_points_bloc.dart';
+import 'data/repositories/person_repository.dart';
+import 'firebase_options.dart';
+import 'router/auto_router.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+import 'bloc/my_app_bloc.dart';
+import 'bloc/profile_bloc/profile_bloc.dart';
+import 'data/models/person.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  PersonRepository personRepository = PersonRepository();
 
+  PersonRepository personRepository = PersonRepository();
+  Person person = Person(uid: '', fullName: '', email: '', displayName: '', photoUrl: '', phoneNumber: '');
+
+  final authenticationBloc = AuthenticationBloc(personRepository: personRepository);
+  final profileBloc = ProfileBloc(person: person);
+  final useCasePointBloc = UseCasePointBloc();
+
+  final myAppBloc = MyAppBloc(
+    authenticationBloc: authenticationBloc,
+    profileBloc: profileBloc,
+    useCasePointBloc: useCasePointBloc,
+  );
 
   runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider<UseCasePointBloc>(
-          create:(_) => UseCasePointBloc(),
-        ),
-        BlocProvider<AuthenticationBloc>(
-          create: (_)=> AuthenticationBloc(personRepository: personRepository),
-        ),
-      ],
+    MyAppBlocProvider(
+      data: MyAppBlocProviderData(myAppBloc),
       child: const MyApp(),
     ),
   );
   configLoading();
 }
+
+
 void configLoading() {
   EasyLoading.instance
     ..displayDuration = const Duration(milliseconds: 2000)
@@ -60,6 +67,8 @@ class _MyAppState extends State<MyApp>{
   final _appRouter = AppRouter();
   @override
   Widget build(BuildContext context){
+    final myAppBloc = MyAppBlocProvider.of(context).myAppBloc;
+
     return MaterialApp.router(
         title: 'Use Case Points Tool',
         theme: ThemeData(

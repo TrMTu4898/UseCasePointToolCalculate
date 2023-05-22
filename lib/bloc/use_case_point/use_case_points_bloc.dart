@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
-import 'package:usecasepointstool/util/ecf_calculate.dart';
-import 'package:usecasepointstool/util/tcf_calculate.dart';
-import 'package:usecasepointstool/util/uaw_calculate.dart';
-import 'package:usecasepointstool/util/uucw_calculate.dart';
+import '../../util/ecf_calculate.dart';
+import '../../util/tcf_calculate.dart';
+import '../../util/uaw_calculate.dart';
+import '../../util/uucw_calculate.dart';
 part 'use_case_points_event.dart';
 part 'use_case_points_state.dart';
 part 'form_bloc/uucw_form_bloc.dart';

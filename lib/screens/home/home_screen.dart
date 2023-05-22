@@ -7,6 +7,9 @@ import 'package:usecasepointstool/screens/home_view_screen.dart';
 import 'package:usecasepointstool/widgets/button/button_import.dart';
 import 'package:usecasepointstool/widgets/button/button_use_case_point.dart';
 
+import '../../bloc/authentication/authentication_bloc.dart';
+import '../../bloc/my_app_bloc.dart';
+
 @RoutePage()
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -53,11 +56,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Center(
                 child: UseCasePointButton(
                   onPressed: () {
+                    final myAppBlocData = MyAppBlocProvider.of(context);
+                    final AuthenticationBloc authenticationBloc = myAppBlocData.myAppBloc.authenticationBloc;
+                    authenticationBloc.add(ClickButtonEvent());
                     context.navigateTo(const UseCasePointRoute());
                     final tabsRouter = AutoTabsRouter.of(context);
-                    setState(() {
-                      selectedIndex = 1;
-                    });
+
                   },
                 ),
               ),
