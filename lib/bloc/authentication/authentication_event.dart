@@ -33,3 +33,5 @@ class LogoutRequested extends AuthenticationEvent {
   @override
   String toString() => 'LogoutRequested';
 }
+
+class ClickButtonEvent extends AuthenticationEvent{}

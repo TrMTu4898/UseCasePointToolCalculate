@@ -51,3 +51,8 @@ class IsAuthenticationState {
   @override
   List<Object?> get props => [isAuthenticated];
 }
+
+class ClickButton extends AuthenticationState {
+  @override
+  List<Object?> get props => [];
+}

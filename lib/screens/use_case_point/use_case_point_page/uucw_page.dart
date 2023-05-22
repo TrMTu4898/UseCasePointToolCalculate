@@ -98,6 +98,8 @@ class _UUCWPageState extends State<UUCWPage> {
         onSubmitting: (context, state) {},
         onSuccess: (context, state) {
           // Show the result of the calculation
+          print(state);
+
           final uucwState = widget.useCasePointBloc.state;
           if (uucwState is UseCasePointStateUUCWSuccess) {
             uucw = uucwState.uucw;

@@ -10,6 +10,7 @@ import 'package:usecasepointstool/router/auto_router.gr.dart';
 import 'package:usecasepointstool/widgets/button/bottom_navigation.dart';
 import 'package:boxicons/boxicons.dart';
 
+import '../bloc/my_app_bloc.dart';
 import 'authentication/login_screen.dart';
 
 @RoutePage()
@@ -31,10 +32,11 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
   late AuthenticationBloc authenticationBloc;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final myAppBlocData = MyAppBlocProvider.of(context);
     personRepository = PersonRepository();
-    authenticationBloc = AuthenticationBloc(personRepository: personRepository);
+    authenticationBloc = myAppBlocData.myAppBloc.authenticationBloc;
   }
 
   @override
@@ -110,7 +112,12 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
       bloc: authenticationBloc,
       listener: (context, state) {
         print(state);
-        if (state is AuthenticationAuthenticated) {
+        if(state is ClickButton){
+          setState(() {
+            selectedIndex = 1;
+          });
+        }
+        if (state is AuthenticationAuthenticated ) {
           setState(() {
             person = state.user;
             currentUser = person.uid;
