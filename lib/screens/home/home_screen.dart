@@ -1,11 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:usecasepointstool/layout/top_left_layout.dart';
-import 'package:usecasepointstool/router/auto_router.gr.dart';
-import 'package:usecasepointstool/screens/home_view_screen.dart';
-import 'package:usecasepointstool/widgets/button/button_import.dart';
-import 'package:usecasepointstool/widgets/button/button_use_case_point.dart';
+import '../../layout/top_left_layout.dart';
+import '../../router/auto_router.gr.dart';
+import '../../widgets/button/button_import.dart';
+import '../../widgets/button/button_use_case_point.dart';
 
 import '../../bloc/authentication/authentication_bloc.dart';
 import '../../bloc/my_app_bloc.dart';

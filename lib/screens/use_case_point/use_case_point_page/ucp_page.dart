@@ -1,14 +1,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:usecasepointstool/bloc/use_case_point/use_case_points_bloc.dart';
-import 'package:usecasepointstool/layout/top_left_layout.dart';
-import 'package:usecasepointstool/screens/use_case_point/use_case_point_page/ecf_page.dart';
-import 'package:usecasepointstool/screens/use_case_point/use_case_point_page/tcf_page.dart';
-import 'package:usecasepointstool/screens/use_case_point/use_case_point_page/uaw_page.dart';
-import 'package:usecasepointstool/screens/use_case_point/use_case_point_page/uucw_page.dart';
-import 'package:usecasepointstool/util/ucp_calculate.dart';
-import 'package:usecasepointstool/widgets/widgets_screen/widget_table.dart';
+import '../../../bloc/use_case_point/use_case_points_bloc.dart';
+import '../../../layout/top_left_layout.dart';
+import 'ecf_page.dart';
+import 'tcf_page.dart';
+import 'uaw_page.dart';
+import 'uucw_page.dart';
+import '../../../util/ucp_calculate.dart';
+import '../../../widgets/button/button_widget.dart';
 
 @RoutePage()
 class UCPPage extends StatefulWidget {
@@ -30,6 +30,7 @@ class UCPPage extends StatefulWidget {
 }
 
 class _UCPPageState extends State<UCPPage> {
+  final TextEditingController _nameProjectController = TextEditingController();
   final dataUUCP = [
     ['Classify', 'Weight', '', 'Number of\nUse case', 'Result'],
     ['Simple', '5', 'X', '', ''],
@@ -82,7 +83,7 @@ class _UCPPageState extends State<UCPPage> {
         dataUAW[1][3] = simpleActors.toString();
         dataUAW[2][3] = averageActors.toString();
         dataUAW[3][3] = complexActors.toString();
-        double ucp = ucpCalculate(uucw,uaw,tcfValue,ecfValue);
+        double ucp = ucpCalculate(uucw, uaw, tcfValue, ecfValue);
         return Scaffold(
           backgroundColor: const Color(0xFFF5F5F5),
           appBar: AppBar(
@@ -201,6 +202,66 @@ class _UCPPageState extends State<UCPPage> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 20,),
+                    Container(
+                      height: screenHeight/20,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+                        color: Colors.white,
+                      ),
+                      padding: const EdgeInsets.only(top: 10, bottom: 0),
+                      child: Center(
+                        child: TextFormField(
+                          controller: _nameProjectController,
+                          decoration: const InputDecoration(
+                            hintText: 'Enter a name project',
+                            hintStyle: TextStyle(fontWeight: FontWeight.bold),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 20, bottom: paddingBottom),
+                            child: ButtonWidget(
+                              onPressed: () {},
+                              backgroundColor: Colors.white,
+                              radiusCircular: 14,
+                              sizeButton:
+                                  Size(screenWidth / 2.5, screenHeight / 20),
+                              textColor: Colors.black,
+                              textSize: 16,
+                              title: 'Save',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 20,
+                        ),
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                                top: 20, bottom: paddingBottom),
+                            child: ButtonWidget(
+                              onPressed: () {},
+                              backgroundColor: Colors.white,
+                              radiusCircular: 14,
+                              sizeButton:
+                                  Size(screenWidth / 2.5, screenHeight / 20),
+                              textColor: Colors.black,
+                              textSize: 16,
+                              title: 'New calculate',
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 ),
               ),

@@ -9,10 +9,10 @@ import '../../data/repositories/person_repository.dart';
 import '../../router/auto_router.gr.dart';
 import '../home_view_screen.dart';
 import '../../untillize/auth_validator.dart';
-import 'package:usecasepointstool/widgets/button/button_signin_with.dart';
-import 'package:usecasepointstool/widgets/button/button_forgot_password.dart';
-import 'package:usecasepointstool/widgets/button/button_signin.dart';
-import 'package:usecasepointstool/widgets/button/button_signup.dart';
+import '../../widgets/button/button_signin_with.dart';
+import '../../widgets/button/button_forgot_password.dart';
+import '../../widgets/button/button_signin.dart';
+import '../../widgets/button/button_signup.dart';
 
 @RoutePage()
 class LogInScreen extends StatefulWidget {
@@ -269,7 +269,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 ),
                 SignUpButton(
                   onPressed: () {
-                    context.pushRoute( RegisterRoute(authenticationBloc: widget.authenticationBloc));
+                    context.pushRoute(RegisterRoute(authenticationBloc: widget.authenticationBloc));
                   },
                 ),
                 const SizedBox(

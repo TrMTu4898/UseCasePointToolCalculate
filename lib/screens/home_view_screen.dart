@@ -3,11 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
-import 'package:usecasepointstool/bloc/authentication/authentication_bloc.dart';
-import 'package:usecasepointstool/data/models/person.dart';
-import 'package:usecasepointstool/data/repositories/person_repository.dart';
-import 'package:usecasepointstool/router/auto_router.gr.dart';
-import 'package:usecasepointstool/widgets/button/bottom_navigation.dart';
+import '../bloc/authentication/authentication_bloc.dart';
+import '../data/models/person.dart';
+import '../data/repositories/person_repository.dart';
+import '../router/auto_router.gr.dart';
+import '../widgets/button/bottom_navigation.dart';
 import 'package:boxicons/boxicons.dart';
 
 import '../bloc/my_app_bloc.dart';
@@ -30,6 +30,7 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
   late PersonRepository personRepository;
   late Person person;
   late AuthenticationBloc authenticationBloc;
+  late SignUpFormBloc signUpFormBloc;
 
   @override
   void didChangeDependencies() {
@@ -111,7 +112,6 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       bloc: authenticationBloc,
       listener: (context, state) {
-        print(state);
         if(state is ClickButton){
           setState(() {
             selectedIndex = 1;
@@ -132,7 +132,6 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
       },
       child: Builder(
         builder: (context) {
-          print(isAuthentication);
           return isAuthentication
               ? AutoTabsRouter.pageView(
             routes: [

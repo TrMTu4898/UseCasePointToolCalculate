@@ -164,7 +164,9 @@ class _UAWPageState extends State<UAWPage> {
                           physics: const ClampingScrollPhysics(),
                           children: [
                             Padding(
-                              padding:  EdgeInsets.only(top: paddingTextTop, bottom: paddingTextBottom),
+                              padding: EdgeInsets.only(
+                                  top: paddingTextTop,
+                                  bottom: paddingTextBottom),
                               child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
@@ -181,11 +183,15 @@ class _UAWPageState extends State<UAWPage> {
                                               widget.uawFormBloc.simpleActors,
                                           keyboardType: TextInputType.number,
                                           decoration: const InputDecoration(
-                                              hintText:
-                                                  'Enter number of Simple Actors',
-                                              //border: OutlineInputBorder(),
-                                              hintStyle: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
+                                            hintText:
+                                                'Enter number of Simple Actors',
+                                            //border: OutlineInputBorder(),
+                                            hintStyle: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide.none,
+                                            ),
+                                          ),
                                           textInputAction: TextInputAction.next,
                                           onChanged: (value) {
                                             setState(() {
@@ -211,7 +217,9 @@ class _UAWPageState extends State<UAWPage> {
                                   )),
                             ),
                             Padding(
-                              padding:  EdgeInsets.only(top: paddingTextTop, bottom: paddingTextBottom),
+                              padding: EdgeInsets.only(
+                                  top: paddingTextTop,
+                                  bottom: paddingTextBottom),
                               child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(25),
@@ -229,11 +237,15 @@ class _UAWPageState extends State<UAWPage> {
                                               widget.uawFormBloc.averageActors,
                                           keyboardType: TextInputType.number,
                                           decoration: const InputDecoration(
-                                              hintText:
-                                                  'Enter number of Average Actors',
-                                              // border: OutlineInputBorder(),
-                                              hintStyle: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
+                                            hintText:
+                                                'Enter number of Average Actors',
+                                            // border: OutlineInputBorder(),
+                                            hintStyle: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide.none,
+                                            ),
+                                          ),
                                           textInputAction: TextInputAction.next,
                                           onChanged: (value) {
                                             setState(() {
@@ -259,7 +271,9 @@ class _UAWPageState extends State<UAWPage> {
                                   )),
                             ),
                             Padding(
-                              padding:  EdgeInsets.only(top: paddingTextTop, bottom: paddingTextBottom),
+                              padding: EdgeInsets.only(
+                                  top: paddingTextTop,
+                                  bottom: paddingTextBottom),
                               child: Container(
                                   //width: screenWidth - 50,
                                   decoration: BoxDecoration(
@@ -278,11 +292,15 @@ class _UAWPageState extends State<UAWPage> {
                                               widget.uawFormBloc.complexActors,
                                           keyboardType: TextInputType.number,
                                           decoration: const InputDecoration(
-                                              hintText:
-                                                  'Enter number of Complex Actors',
-                                              //border: OutlineInputBorder(),
-                                              hintStyle: TextStyle(
-                                                  fontWeight: FontWeight.bold)),
+                                            hintText:
+                                                'Enter number of Complex Actors',
+                                            //border: OutlineInputBorder(),
+                                            hintStyle: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide.none,
+                                            ),
+                                          ),
                                           textInputAction: TextInputAction.done,
                                           onChanged: (value) {
                                             setState(() {
@@ -305,16 +323,18 @@ class _UAWPageState extends State<UAWPage> {
                                   )),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 20, bottom: 20),
+                              padding:
+                                  const EdgeInsets.only(top: 20, bottom: 20),
                               child: Center(
                                 child: ButtonWidget(
-                                  onPressed:widget.uawFormBloc.submit,
+                                  onPressed: widget.uawFormBloc.submit,
                                   title: 'Calculate',
                                   backgroundColor: const Color(0xFF50C2C9),
                                   textColor: Colors.white,
                                   radiusCircular: 24,
                                   textSize: 18,
-                                  sizeButton: Size(screenWidth/1.3,screenWidth/8),
+                                  sizeButton:
+                                      Size(screenWidth / 1.3, screenWidth / 8),
                                 ),
                               ),
                             ),

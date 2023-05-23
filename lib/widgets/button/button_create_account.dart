@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class CreateAccouuntButton extends StatelessWidget{
+class CreateAccountButton extends StatelessWidget{
   final void Function() onPressed;
-  const CreateAccouuntButton({
+  const CreateAccountButton({
     super.key,
     required this.onPressed
 });
@@ -22,10 +22,9 @@ class CreateAccouuntButton extends StatelessWidget{
           minimumSize:
           MaterialStateProperty.all<Size>(const Size(328, 48)),
         ),
-        onPressed: () {
-        },
+        onPressed: onPressed,
         child: const Text(
-          'Tạo tài khoản',
+          'Create Account',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w600,

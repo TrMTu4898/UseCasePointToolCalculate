@@ -56,3 +56,23 @@ class ClickButton extends AuthenticationState {
   @override
   List<Object?> get props => [];
 }
+
+class SignUpStateLoading extends AuthenticationState {
+  @override
+  List<Object?> get props => [];
+}
+
+class SignUpStateSuccess extends AuthenticationState {
+  final Person currentUser;
+  const SignUpStateSuccess({
+    required this.currentUser
+});
+
+  @override
+  List<Object?> get props => [];
+}
+
+class SignUpStateFailure extends AuthenticationState {
+  @override
+  List<Object?> get props => [];
+}

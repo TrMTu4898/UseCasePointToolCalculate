@@ -2,11 +2,10 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
-import 'package:usecasepointstool/bloc/use_case_point/use_case_points_bloc.dart';
-import 'package:usecasepointstool/layout/top_left_layout.dart';
-import 'package:usecasepointstool/widgets/button/button_calculate.dart';
-import 'package:usecasepointstool/widgets/button/button_widget.dart';
-import 'package:usecasepointstool/widgets/widgets_screen/widget_table.dart';
+import '../../../bloc/use_case_point/use_case_points_bloc.dart';
+import '../../../layout/top_left_layout.dart';
+import '../../../widgets/button/button_widget.dart';
+import '../../../widgets/widgets_screen/widget_table.dart';
 
 @RoutePage()
 class UUCWPage extends StatefulWidget {
@@ -98,8 +97,6 @@ class _UUCWPageState extends State<UUCWPage> {
         onSubmitting: (context, state) {},
         onSuccess: (context, state) {
           // Show the result of the calculation
-          print(state);
-
           final uucwState = widget.useCasePointBloc.state;
           if (uucwState is UseCasePointStateUUCWSuccess) {
             uucw = uucwState.uucw;
@@ -191,7 +188,10 @@ class _UUCWPageState extends State<UUCWPage> {
                                               'Enter number of Simple Use Case',
                                           //border: OutlineInputBorder(),
                                           hintStyle: TextStyle(
-                                              fontWeight: FontWeight.bold)),
+                                              fontWeight: FontWeight.bold),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                        ),),
                                       textInputAction: TextInputAction.next,
                                       onChanged: (value) {
                                         setState(() {
@@ -239,7 +239,10 @@ class _UUCWPageState extends State<UUCWPage> {
                                               'Enter number of Average Use Case',
                                           // border: OutlineInputBorder(),
                                           hintStyle: TextStyle(
-                                              fontWeight: FontWeight.bold)),
+                                              fontWeight: FontWeight.bold),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                        ),),
                                       textInputAction: TextInputAction.next,
                                       onChanged: (value) {
                                         setState(() {
@@ -286,9 +289,11 @@ class _UUCWPageState extends State<UUCWPage> {
                                       decoration: const InputDecoration(
                                           hintText:
                                               'Enter number of Complex Use Case',
-                                          //border: OutlineInputBorder(),
                                           hintStyle: TextStyle(
-                                              fontWeight: FontWeight.bold)),
+                                              fontWeight: FontWeight.bold),
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide.none,
+                                        ),),
                                       textInputAction: TextInputAction.done,
                                       onChanged: (value) {
                                         setState(() {
