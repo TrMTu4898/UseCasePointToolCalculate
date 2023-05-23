@@ -13,8 +13,8 @@ class CalculateButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFF50C2C9),
-        minimumSize: const Size(300, 48),
-        padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 25),
+        //minimumSize: const Size(350, 60),
+        padding: const EdgeInsets.symmetric(horizontal: 120,vertical: 15),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),

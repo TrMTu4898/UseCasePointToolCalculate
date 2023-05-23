@@ -24,6 +24,12 @@ class CustomCard extends StatefulWidget {
 }
 
 class _CustomCardState extends State<CustomCard> {
+  String? selectedValue;
+  @override
+  void initState() {
+    super.initState();
+    selectedValue = widget.dropdownValue;
+  }
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
@@ -103,7 +109,7 @@ class _CustomCardState extends State<CustomCard> {
                           const Text('Ratting:'),
                           DropdownButtonHideUnderline(
                             child: DropdownButton2<String>(
-                              value: widget.dropdownValue,
+                              value: selectedValue,
                               items: widget.dropdownItems
                                   .map((String value) =>
                                       DropdownMenuItem<String>(
@@ -111,7 +117,12 @@ class _CustomCardState extends State<CustomCard> {
                                         child: Text(value),
                                       ))
                                   .toList(),
-                              onChanged: widget.onDropdownChanged,
+                              onChanged: (value){
+                                widget.onDropdownChanged(value);
+                                setState(() {
+                                  selectedValue = value;
+                                });
+                              },
                             ),
                           ),
                         ],

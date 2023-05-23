@@ -14,10 +14,11 @@ class AppRouter extends $AppRouter{
       AutoRoute(path: 'Home', page: HomeRoute.page),
       AutoRoute(path: 'History', page: UseCasePointHistoryRoute.page),
       AutoRoute(path: 'Profile', page: ProfileRoute.page),
+      AutoRoute(path: 'LogIn',page: LogInRoute.page),
       AutoRoute(path: 'Tool',page: UseCasePointRoute.page,
         children: [
-          AutoRoute(page: UUCPRoute.page),
-          AutoRoute(page: UAWRoute.page),
+          AutoRoute(page: UUCWRoute.page),
+          AutoRoute(page: UAWRoute.page,),
           AutoRoute(page: TCFRoute.page),
           AutoRoute(page: ECFRoute.page),
           AutoRoute(page: UCPRoute.page),

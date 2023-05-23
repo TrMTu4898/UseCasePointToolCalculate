@@ -5,11 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:usecasepointstool/bloc/profile_bloc/profile_bloc.dart';
 import 'package:usecasepointstool/data/models/person.dart';
 import 'package:usecasepointstool/layout/profile_layout.dart';
+import 'package:usecasepointstool/widgets/button/button_profile.dart';
 import 'package:usecasepointstool/widgets/widgets_screen/widget_profile.dart';
 
 @RoutePage()
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final String currentUser;
+  const ProfileScreen({Key? key, required this.currentUser}) : super(key: key);
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -19,7 +21,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late TextEditingController _fullNameController = TextEditingController();
   late TextEditingController _emailController = TextEditingController();
   late TextEditingController _photoUrlController = TextEditingController();
-  bool isEditing = false;
+  late TextEditingController _phoneNumberController = TextEditingController();
+
+  bool isEditing = true;
 
   final _profileBloc = ProfileBloc(
       person: Person(
@@ -28,15 +32,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
     email: '',
     displayName: '',
     photoUrl: '',
+    phoneNumber: '',
   ));
+  final String _fullName = 'Tran Minh Tu';
+  final String _displayName = 'Tran Minh Tu';
+  final String _email = 'minhtu04081998.work@gmail.com';
+  final String _photoUrl = 'assets/images/Profile_Image.jpg';
+  final String _phoneNumber = '0342769724';
 
   @override
   void initiState() {
     super.initState();
-    _displayNameController = TextEditingController(text: '123');
-    _fullNameController = TextEditingController(text: '456');
-    _emailController = TextEditingController(text: '789');
-    _photoUrlController = TextEditingController(text: '1011123');
+    _displayNameController = TextEditingController();
+    _fullNameController = TextEditingController();
+    _emailController = TextEditingController();
+    _photoUrlController = TextEditingController();
+    _phoneNumberController = TextEditingController();
   }
 
   @override
@@ -59,10 +70,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: const Color(0xff50C2C9),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              // xử lý sự kiện khi người dùng click vào icon back
-              router.pop(true);
-            },
+            onPressed: () {},
           ),
           title: const Text(
             'Profile',
@@ -91,39 +99,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: ProfileLayout(),
                   ),
                 ),
-                const Positioned(
-                  bottom: -95,
+                Positioned(
+                  top: screenHeight / 1.6,
                   right: 0,
                   left: 0,
-                  child: Center(
+                  child: const Center(
                     child: ProfileLayout(),
                   ),
                 ),
                 /*---------------------Widget-------------------------*/
                 Positioned(
-                  top: screenHeight /5,
-                  width: screenWidth-30,
-                  height: screenHeight/2,
-                  child: SingleChildScrollView(
-                    reverse: true,
-                    padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom),
-                    child: BlocBuilder<ProfileBloc, ProfileState>(
-                      builder: (context, state) {
-                        if (state is ProfileViewState) {
-                          isEditing = true;
-                        } else if (state is ProfileEditState) {
-                          isEditing = true;
-                        }
-                        return WidgetProfile(
-                          emailTextController: _emailController,
-                          displayNameTextController: _displayNameController,
-                          photoUrlTextController: _photoUrlController,
-                          fullNameTextController: _fullNameController,
-                          isEditing: isEditing,
-                        );
-                      },
-                    ),
+                  top: 50,
+                  left: 15,
+                  width: screenWidth - 30,
+                  height: screenHeight / 1.5,
+                  child: WidgetProfile(
+                    emailTextController: _emailController,
+                    displayNameTextController: _displayNameController,
+                    photoUrlTextController: _photoUrlController,
+                    fullNameTextController: _fullNameController,
+                    phoneNumberTextController: _phoneNumberController,
+                    email: _email,
+                    displayName: _displayName,
+                    photoURL: _photoUrl,
+                    fullName: _fullName,
+                    isEditing: isEditing,
+                    phoneNumber: _phoneNumber,
                   ),
                 ),
                 /*---------------------Widget-------------------------*/

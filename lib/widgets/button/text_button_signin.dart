@@ -16,14 +16,14 @@ class TextButtonSignIn extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
               Text(
-                'Bạn đã có tài khoản ?',
+                'You are have account?',
                 style: TextStyle(
                   fontSize: 14,
                 ),
               ),
               SizedBox(width: 5),
               Text(
-                'Đăng Nhập',
+                'Sign In',
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

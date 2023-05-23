@@ -1,7 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:usecasepointstool/bloc/use_case_point/use_case_points_bloc.dart';
 import 'package:usecasepointstool/router/auto_router.gr.dart';
-import 'package:usecasepointstool/screens/home_view_screen.dart';
+
+import '../../bloc/my_app_bloc.dart';
 
 @RoutePage()
 class UseCasePointScreen extends StatefulWidget {
@@ -13,51 +16,40 @@ class UseCasePointScreen extends StatefulWidget {
 class _UseCasePointScreenState extends State<UseCasePointScreen> {
   @override
   Widget build(BuildContext context) {
-    bool showBottomNavigationBar = false;
+    final myAppBlocData = MyAppBlocProvider.of(context);
+
+    final UseCasePointBloc useCasePointBloc = myAppBlocData.myAppBloc.useCasePointBloc;
+    final UUCWFormBloc uucpFormBloc = UUCWFormBloc(useCasePointBloc: useCasePointBloc);
+    final UAWFormBloc uawFormBloc = UAWFormBloc(useCasePointBloc: useCasePointBloc);
+    final TCFFormBloc tcfFormBloc = TCFFormBloc(useCasePointBloc: useCasePointBloc);
+    final ECFFormBloc ecfFormBloc = ECFFormBloc(useCasePointBloc: useCasePointBloc);
+
     return AutoTabsRouter.pageView(
-        routes: const [
-          UUCPRoute(),
-          UAWRoute(),
-          TCFRoute(),
-          ECFRoute(),
-          UCPRoute()
-        ],
-        builder: (context, child, _) {
-          final tabsRouter = AutoTabsRouter.of(context);
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Use Case Points'),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
-                  context.pushRoute(const HomeRoute());
-                  setState(() {
-                    selectedIndex = 0;
-                  });
-                },
-              ),
-              backgroundColor: const Color(0xff50C2C9),
-            ),
-            body: child,
-            bottomNavigationBar: showBottomNavigationBar
-                ? BottomNavigationBar(
-                    currentIndex: tabsRouter.activeIndex,
-                    onTap: tabsRouter.setActiveIndex,
-                    items: const [
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.calculate), label: 'UUCP Screen'),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.calculate), label: 'UAW Screen'),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.calculate), label: 'TCF Screen'),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.calculate), label: 'ECF Screen'),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.calculate), label: 'UCP Screen'),
-                    ],
-                  )
-                : null,
-          );
-        });
+      routes: [
+        UUCWRoute(
+          useCasePointBloc: useCasePointBloc,
+          uucwFormBloc: uucpFormBloc,
+        ),
+        UAWRoute(
+          useCasePointBloc: useCasePointBloc,
+          uawFormBloc: uawFormBloc,
+        ),
+        TCFRoute(
+          useCasePointBloc: useCasePointBloc,
+          tcfFormBloc: tcfFormBloc,
+        ),
+        ECFRoute(
+          useCasePointBloc: useCasePointBloc,
+          ecfFormBloc: ecfFormBloc,
+        ),
+        UCPRoute(
+          useCasePointBloc: useCasePointBloc,
+          uucpFormBloc: uucpFormBloc,
+          uawFormBloc: uawFormBloc,
+          tcfFormBloc: tcfFormBloc,
+          ecfFormBloc: ecfFormBloc,
+        ),
+      ],
+    );
   }
 }

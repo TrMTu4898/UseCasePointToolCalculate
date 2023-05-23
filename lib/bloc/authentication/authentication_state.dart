@@ -41,3 +41,38 @@ class Unauthenticated extends AuthenticationState {
   @override
   List<Object?> get props => [];
 }
+
+class IsAuthenticationState {
+  final bool isAuthenticated;
+  final Person user;
+
+  IsAuthenticationState({required this.isAuthenticated, required this.user});
+
+  @override
+  List<Object?> get props => [isAuthenticated];
+}
+
+class ClickButton extends AuthenticationState {
+  @override
+  List<Object?> get props => [];
+}
+
+class SignUpStateLoading extends AuthenticationState {
+  @override
+  List<Object?> get props => [];
+}
+
+class SignUpStateSuccess extends AuthenticationState {
+  final Person currentUser;
+  const SignUpStateSuccess({
+    required this.currentUser
+});
+
+  @override
+  List<Object?> get props => [];
+}
+
+class SignUpStateFailure extends AuthenticationState {
+  @override
+  List<Object?> get props => [];
+}

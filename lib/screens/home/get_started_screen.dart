@@ -16,6 +16,7 @@ class GetStartedScreen extends StatelessWidget {
     final double screenHeight = size.height;
     return SafeArea(
       child: Scaffold(
+        backgroundColor: const Color(0xFFEEEEEE),
         body: Stack(
           children: [
             const Positioned(

@@ -1,4 +1,4 @@
-double uucpCalculator(
+double uucwCalculator(
     int simpleUseCase, int averageUseCase, int complexUseCase) {
   const simpleWeight = 5;
   const averageWeight = 10;

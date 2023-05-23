@@ -4,6 +4,7 @@ class Person {
   String email;
   String displayName;
   String photoUrl;
+  String phoneNumber;
 
   Person({
     required this.uid,
@@ -11,5 +12,6 @@ class Person {
     required this.email,
     required this.displayName,
     required this.photoUrl,
+    required this.phoneNumber,
   });
 }

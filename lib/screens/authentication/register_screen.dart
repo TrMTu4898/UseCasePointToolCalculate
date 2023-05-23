@@ -1,20 +1,18 @@
-import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-
-import 'package:url_launcher/url_launcher.dart';
-import 'package:usecasepointstool/data/repositories/person_repository.dart';
-import 'package:usecasepointstool/router/auto_router.gr.dart';
-import 'package:usecasepointstool/untillize/auth_validator.dart';
-import 'package:usecasepointstool/widgets/button/button_create_account.dart';
-import 'package:usecasepointstool/widgets/button/text_button_signin.dart';
+import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import '../../bloc/authentication/authentication_bloc.dart';
+import '../../data/repositories/person_repository.dart';
+import '../../router/auto_router.gr.dart';
+import '../../widgets/button/button_create_account.dart';
+import '../../widgets/button/text_button_signin.dart';
 
 @RoutePage()
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+  final AuthenticationBloc authenticationBloc;
+
+  const RegisterScreen({Key? key, required this.authenticationBloc})
+      : super(key: key);
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -23,98 +21,32 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   bool _obscureTextPassWord = true;
   bool _obscureTextConfirmPassWord = true;
-//------------------------ controller input fields-----------------------
-  TextEditingController? _fullName;
-  TextEditingController? _email;
-  TextEditingController? _password1;
-  TextEditingController? _password2;
-  final _formKey = GlobalKey<FormState>();
   bool _checked = false;
-
   final PersonRepository personRepository = PersonRepository();
+  late final signUpFormBloc ;
+
   @override
   void initState() {
     super.initState();
-    _fullName = TextEditingController(text: "");
-    _email = TextEditingController(text: "");
-    _password1 = TextEditingController(text: "");
-    _password2 = TextEditingController(text: "");
+    signUpFormBloc = SignUpFormBloc(authenticationBloc: widget.authenticationBloc);
   }
-  Future<User?> signUp() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      try {
-        final User? user = await personRepository.signUp(
-          email: _email.toString(),
-          password: _password1.toString(),
-        );
-        if (user != null) {
-          print('dang ky thanh cong');
-        } else {
-          print('dang ky that bai');
-        }
-        return user;
-      } catch (e) {
-        print(e.toString());
-        return null;
-      }
-    }
-    return null;
-  }
-
-  Future<void> register(BuildContext context) async {
-    EasyLoading.show(status: 'Vui Lòng chờ đợi');
-    String? email = _email?.text;
-    String? fullName = _fullName?.text;
-    String? password1 = _password1?.text;
-    String? password2 = _password2?.text;
-    String? _validateFullName = Validator.validateName(name: fullName);
-    String? _validateEmail = Validator.validateEmail(email: email);
-    String? _validatePassword1 =
-        Validator.validatePassword(password: password1);
-    String? _validatePassword2 = Validator.validateConfirmPassword(
-        password: password1, confirmPassword: password2);
-    print({
-      "name": fullName,
-      "email": email,
-      "pass1": password1,
-      "pass2": password2,
-    });
-    if (email == null &&
-        fullName == null &&
-        password1 == null &&
-        password2 == null) {
-      EasyLoading.showError('Vui lòng điền from đăng kí');
-      return;
-    }
-    if (_validateEmail != null) {
-      EasyLoading.showError(_validateEmail);
-    } else if (_validateFullName != null) {
-      EasyLoading.showError(_validateFullName);
-    } else if (_validatePassword1 != null) {
-      EasyLoading.showError(_validatePassword1);
-    } else if (_validatePassword2 != null) {
-      EasyLoading.showError(_validatePassword2);
-    } else {
-      print({
-        "name": fullName,
-      });
-    }
-    EasyLoading.dismiss();
+  @override
+  void dispose() {
+    signUpFormBloc.close();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final router = AutoRouter.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F5F5),
+      backgroundColor: const Color(0xFFEEEEEE),
       appBar: AppBar(
         backgroundColor: const Color(0xff50C2C9),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // xử lý sự kiện khi người dùng click vào icon back
-            router.pop(true);
+            AutoRouter.of(context).pop(true);
           },
         ),
         title: const Text(
@@ -132,17 +64,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
       resizeToAvoidBottomInset: false,
-      // resizeToAvoidBottomPadding: false,
-      body: SafeArea(
+      body: FormBlocListener<SignUpFormBloc, String, String>(
+        formBloc: signUpFormBloc,
+        onSubmitting: (context, state) {
+        },
+        onSuccess: (context, state) {
+          print(state);
+          final signupState = widget.authenticationBloc.state;
+          print(signupState);
+          if (signupState is SignUpStateSuccess) {
+            print(signupState);
+            print(signupState.currentUser);
+          } else if(signupState is SignUpStateFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Account creation failed123')),
+            );
+          }
+        },
+        onFailure: (context, state) {
+          final errorMessage = state.failureResponse ?? 'Account creation failed';
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMessage),
+            ),
+          );
+        },
+        child: SafeArea(
           minimum: const EdgeInsets.only(left: 17, right: 17),
           child: SingleChildScrollView(
             reverse: true,
             padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // cần đổi
                 Container(
                   padding: const EdgeInsets.only(top: 20, bottom: 20),
                   width: double.infinity,
@@ -152,43 +108,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 243,
                   ),
                 ),
-                // --------------------------UserName----------------------
                 Padding(
                   padding: const EdgeInsets.only(top: 0, bottom: 10),
                   child: Container(
-                    child: TextFormField(
-                      controller: _fullName,
-                      keyboardType: TextInputType.emailAddress,
+                    child: TextFieldBlocBuilder(
+                      textFieldBloc: signUpFormBloc.fullName,
+                      keyboardType: TextInputType.name,
                       onChanged: (value) => setState(() {}),
                       decoration: InputDecoration(
                         filled: true,
-                        hintText: 'Họ và tên ',
+                        hintText: 'Full Name',
                         prefixIcon: const Icon(
                           Icons.person,
                           color: Color(0xff50C2C9),
                         ),
                         fillColor: const Color.fromARGB(255, 250, 252, 255),
                         border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(50)),
-                        focusedBorder: const OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color(0xff50C2C9),
-                            width: 2,
-                          ),
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(50),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 20),
+                          vertical: 0,
+                          horizontal: 20,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                // --------------------------Email----------------------
                 Padding(
                   padding: const EdgeInsets.only(top: 0, bottom: 10),
                   child: Container(
-                    child: TextFormField(
-                      controller: _email,
+                    child: TextFieldBlocBuilder(
+                      textFieldBloc: signUpFormBloc.email,
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (value) => setState(() {}),
                       decoration: InputDecoration(
@@ -200,8 +151,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         fillColor: const Color.fromARGB(255, 250, 252, 255),
                         border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(50)),
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0xff50C2C9),
@@ -209,28 +161,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 20),
+                          vertical: 0,
+                          horizontal: 20,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                // --------------------------PassWord----------------------
                 Padding(
                   padding: const EdgeInsets.only(top: 0, bottom: 10),
                   child: Container(
-                    child: TextFormField(
-                      // validator: (value) =>_validator ,
-                      controller: _password1,
+                    child: TextFieldBlocBuilder(
+                      textFieldBloc: signUpFormBloc.password,
                       keyboardType: TextInputType.visiblePassword,
-                      // validator: (value) =>
-                      //     Validator.validatePassword(password: value),
-                      onChanged: (value) => setState(() {
-                        // _passWord = value;
-                      }),
+                      onChanged: (value) => setState(() {}),
                       obscureText: _obscureTextPassWord,
                       decoration: InputDecoration(
                         filled: true,
-                        hintText: 'Mật khẩu',
+                        hintText: 'Password',
                         prefixIcon: const Icon(
                           Icons.key,
                           color: Color(0xff50C2C9),
@@ -250,8 +198,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         fillColor: const Color.fromARGB(255, 250, 252, 255),
                         border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(50)),
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0xff50C2C9),
@@ -259,26 +208,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 20),
+                          vertical: 0,
+                          horizontal: 20,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                // --------------------------Confirm PassWord----------------------
                 Padding(
                   padding: const EdgeInsets.only(top: 0, bottom: 10),
                   child: Container(
-                    child: TextFormField(
-                      // validator: (value) =>_validator ,
-                      controller: _password2,
+                    child: TextFieldBlocBuilder(
+                      textFieldBloc: signUpFormBloc.confirmPassword,
                       keyboardType: TextInputType.visiblePassword,
-                      onChanged: (value) => setState(() {
-                        // _passWord = value;
-                      }),
+                      onChanged: (value) => setState(() {}),
                       obscureText: _obscureTextConfirmPassWord,
                       decoration: InputDecoration(
                         filled: true,
-                        hintText: 'xác nhận mật khẩu',
+                        hintText: 'Confirm password',
                         prefixIcon: const Icon(
                           Icons.lock,
                           color: Color(0xff50C2C9),
@@ -287,7 +234,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           onTap: () {
                             setState(() {
                               _obscureTextConfirmPassWord =
-                                  !_obscureTextConfirmPassWord;
+                              !_obscureTextConfirmPassWord;
                             });
                           },
                           child: Icon(
@@ -299,8 +246,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         fillColor: const Color.fromARGB(255, 250, 252, 255),
                         border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(50)),
+                          borderSide: BorderSide.none,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
                         focusedBorder: const OutlineInputBorder(
                           borderSide: BorderSide(
                             color: Color(0xff50C2C9),
@@ -308,7 +256,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                         ),
                         contentPadding: const EdgeInsets.symmetric(
-                            vertical: 0, horizontal: 20),
+                          vertical: 0,
+                          horizontal: 20,
+                        ),
                       ),
                     ),
                   ),
@@ -337,40 +287,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          // launchUrl(Uri.parse('https://www.facebook.com/profile.php?id=100012736594723'));
                           setState(() {
                             _checked = !_checked;
                           });
                         },
                         child: const Text(
-                          'Tôi đồng ý với điều khoản',
+                          'I agree to the terms',
                           style: TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.bold),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
-                // --------------------------Login----------------------
-                CreateAccouuntButton(
-                  onPressed: (){
-                    register(context);
-                    signUp();
-                    //personRepository.signOut();
-                  },
+                CreateAccountButton(
+                  onPressed: signUpFormBloc.submit,
                 ),
-                // --------------------------Forgot passWord----------------------
                 const SizedBox(
                   height: 15,
                 ),
                 TextButtonSignIn(
-                  onTap: (){
-                    context.pushRoute(const LogInRoute());
+                  onTap: () {
+                    context.pushRoute(
+                      LogInRoute(
+                        authenticationBloc: widget.authenticationBloc,
+                      ),
+                    );
                   },
-                )
+                ),
               ],
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }
