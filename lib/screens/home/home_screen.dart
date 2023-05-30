@@ -12,6 +12,7 @@ import '../../bloc/my_app_bloc.dart';
 
 import '../../bloc/authentication/authentication_bloc.dart';
 import '../../bloc/my_app_bloc.dart';
+import '../home_view_screen.dart';
 
 @RoutePage()
 class HomeScreen extends StatefulWidget {

@@ -114,9 +114,10 @@ class _UCPPageState extends State<UCPPage> {
     );
     String uid = '';
     bool isOnPressedSave = false;
+    String nameProject = _nameProjectController.text;
     double ucpValue = ucpCalculate(uucw, uaw, tcfValue, ecfValue);
     Project ucpUCP = Project(
-      nameProject: _nameProjectController.text,
+      nameProject: nameProject,
       createdProject: DateTime.now(),
       updatedProject: DateTime.now(),
       uucw: ucpUUCW,
@@ -134,10 +135,7 @@ class _UCPPageState extends State<UCPPage> {
           widget.authenticationBloc.add(CheckLoggedIn());
           if (state is AuthenticationAuthenticated) {
             uid = state.uid.toString();
-
             isOnPressedSave = true;
-            print('123 $state');
-            print(uid);
           } else if (state is AuthenticationUnauthenticated) {
             isOnPressedSave = false;
           }

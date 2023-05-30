@@ -53,37 +53,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _fullNameUpdate = '';
   Future<void> onPressedChangeImage() async {
     try {
-      final imagePicker = ImagePicker();
-      final XFile? imageFile =
-      await imagePicker.pickImage(source: ImageSource.gallery);
-      if (imageFile != null) {
-        File file = File(imageFile.path);
-
-        String fileName = path.basename(file.path);
-        firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
-        firebase_storage.Reference ref = storage.ref().child('images').child(fileName);
-        firebase_storage.UploadTask uploadTask = ref.putFile(file);
-        String newPhotoUrl = await (await uploadTask).ref.getDownloadURL();
-          _photoUrlUpdate = newPhotoUrl;
-      }
-      else{
-        _photoUrlUpdate = _photoUrl;
-      }
+      // final imagePicker = ImagePicker();
+      // final XFile? imageFile =
+      // await imagePicker.pickImage(source: ImageSource.gallery);
+      // if (imageFile != null) {
+      //   File file = File(imageFile.path);
+      //
+      //   String fileName = path.basename(file.path);
+      //   firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
+      //   firebase_storage.Reference ref = storage.ref().child('images').child(fileName);
+      //   firebase_storage.UploadTask uploadTask = ref.putFile(file);
+      //   String newPhotoUrl = await (await uploadTask).ref.getDownloadURL();
+      //     _photoUrlUpdate = newPhotoUrl;
+      // }
+      // else{
+      //   _photoUrlUpdate = _photoUrl;
+      // }
     } catch (e) {
       print('Error selecting image: $e');
     }
   }
-  void _resetScreen(BuildContext context) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (BuildContext context) => ProfileScreen(
-          profileBloc: widget.profileBloc,
-          authenticationBloc: widget.authenticationBloc,
-        ),
-      ),
-    );
-  }
+
 
 
   @override

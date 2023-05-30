@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class WidgetHistoryCard extends StatefulWidget {
   final String nameText;
@@ -24,7 +23,7 @@ class _WidgetHistoryCard extends State<WidgetHistoryCard> {
   Widget build(BuildContext context) {
     return Card(
         borderOnForeground:false ,
-        elevation: 5,
+        elevation: 0,
         color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(15),

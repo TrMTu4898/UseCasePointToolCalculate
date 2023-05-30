@@ -119,31 +119,27 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
             selectedIndex = 1;
           });
         }
-        if (state is AuthenticationAuthenticated ) {
+        if(state is AuthenticationAuthenticated){
           setState(() {
-            uid = state.uid!;
-          });
-        } else if (state is AuthenticationUnauthenticated) {
-          setState(() {
-            uid ='';
+            uid = state.uid.toString();
           });
         }
-
       },
       child: Builder(
         builder: (context) {
+          print(uid);
+
           return isAuthentication
               ? AutoTabsRouter.pageView(
             routes: [
               const HomeRoute(),
               UseCasePointRoute(authenticationBloc: authenticationBloc),
-              UseCasePointHistoryRoute(authenticationBloc: authenticationBloc),
+              UseCasePointHistoryRoute(id:uid),
               ProfileRoute( profileBloc: profileBloc, authenticationBloc: authenticationBloc),
             ],
             physics: const NeverScrollableScrollPhysics(),
             builder: (context, child, _) {
               final tabsRouter = AutoTabsRouter.of(context);
-
               void onButtonSelected(int index) {
                 setState(() {
                   selectedIndex = index;
