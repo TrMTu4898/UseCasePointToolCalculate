@@ -2,76 +2,102 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:usecasepointstool/bloc/profile_bloc/profile_bloc.dart';
-import 'package:usecasepointstool/data/models/person.dart';
-import 'package:usecasepointstool/layout/profile_layout.dart';
-import 'package:usecasepointstool/widgets/button/button_profile.dart';
-import 'package:usecasepointstool/widgets/widgets_screen/widget_profile.dart';
+import 'package:usecasepointstool/router/auto_router.gr.dart';
+import '../../bloc/authentication/authentication_bloc.dart';
+import '../../data/models/person.dart';
+import '../../data/repositories/person_repository.dart';
+import '../../bloc/my_app_bloc.dart';
+import '../../bloc/profile_bloc/profile_bloc.dart';
+import '../../layout/profile_layout.dart';
+import '../../widgets/widgets_screen/widget_profile.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 @RoutePage()
 class ProfileScreen extends StatefulWidget {
-  final String currentUser;
-  const ProfileScreen({Key? key, required this.currentUser}) : super(key: key);
+  final ProfileBloc profileBloc;
+  final AuthenticationBloc authenticationBloc;
+  const ProfileScreen(
+      {Key? key,
+      required this.profileBloc,
+      required this.authenticationBloc})
+      : super(key: key);
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late TextEditingController _displayNameController = TextEditingController();
-  late TextEditingController _fullNameController = TextEditingController();
-  late TextEditingController _emailController = TextEditingController();
-  late TextEditingController _photoUrlController = TextEditingController();
-  late TextEditingController _phoneNumberController = TextEditingController();
-
-  bool isEditing = true;
-
-  final _profileBloc = ProfileBloc(
-      person: Person(
-    uid: '',
-    fullName: '',
-    email: '',
-    displayName: '',
-    photoUrl: '',
-    phoneNumber: '',
-  ));
-  final String _fullName = 'Tran Minh Tu';
-  final String _displayName = 'Tran Minh Tu';
-  final String _email = 'minhtu04081998.work@gmail.com';
-  final String _photoUrl = 'assets/images/Profile_Image.jpg';
-  final String _phoneNumber = '0342769724';
-
+  bool isEditing = false;
+  late PersonRepository personRepository;
   @override
-  void initiState() {
+  void initState() {
     super.initState();
-    _displayNameController = TextEditingController();
-    _fullNameController = TextEditingController();
-    _emailController = TextEditingController();
-    _photoUrlController = TextEditingController();
-    _phoneNumberController = TextEditingController();
+    personRepository = PersonRepository();
   }
 
   @override
   void dispose() {
-    _profileBloc.close();
     super.dispose();
   }
 
+  String _displayName = '';
+  String _email = '';
+  String _photoUrl = '';
+  String _phoneNumber = '';
+  String _fullName = '';
+  String _displayNameUpdate = '';
+  String _photoUrlUpdate = '';
+  String _phoneNumberUpdate = '';
+  String _fullNameUpdate = '';
+  Future<void> onPressedChangeImage() async {
+    try {
+      final imagePicker = ImagePicker();
+      final XFile? imageFile =
+      await imagePicker.pickImage(source: ImageSource.gallery);
+      if (imageFile != null) {
+        File file = File(imageFile.path);
+
+        String fileName = path.basename(file.path);
+        firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
+        firebase_storage.Reference ref = storage.ref().child('images').child(fileName);
+        firebase_storage.UploadTask uploadTask = ref.putFile(file);
+        String newPhotoUrl = await (await uploadTask).ref.getDownloadURL();
+          _photoUrlUpdate = newPhotoUrl;
+      }
+      else{
+        _photoUrlUpdate = _photoUrl;
+      }
+    } catch (e) {
+      print('Error selecting image: $e');
+    }
+  }
+  void _resetScreen(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) => ProfileScreen(
+          profileBloc: widget.profileBloc,
+          authenticationBloc: widget.authenticationBloc,
+        ),
+      ),
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    final router = AutoRouter.of(context);
     final Size size = MediaQuery.of(context).size;
-    final double screenWidth = size.width;
     final double screenHeight = size.height;
+
     return BlocProvider(
-      create: (context) => _profileBloc,
+      create: (context) => widget.authenticationBloc,
       child: Scaffold(
         backgroundColor: const Color(0xFFF5F5F5),
         appBar: AppBar(
           backgroundColor: const Color(0xff50C2C9),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {},
-          ),
+          automaticallyImplyLeading: false,
           title: const Text(
             'Profile',
             style: TextStyle(
@@ -88,48 +114,116 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         resizeToAvoidBottomInset: false,
         body: SafeArea(
-            minimum: const EdgeInsets.only(left: 0, right: 0),
-            child: Stack(
-              children: [
-                const Positioned(
-                  top: -85,
-                  right: 0,
-                  left: 0,
-                  child: Center(
-                    child: ProfileLayout(),
+          minimum: const EdgeInsets.only(left: 0, right: 0),
+          child: Stack(
+            children: [
+              const Positioned(
+                top: -85,
+                right: 0,
+                left: 0,
+                child: Center(
+                  child: ProfileLayout(),
+                ),
+              ),
+              Positioned(
+                top: screenHeight / 1.6,
+                right: 0,
+                left: 0,
+                child: const Center(
+                  child: ProfileLayout(),
+                ),
+              ),
+              /*---------------------Widget-------------------------*/
+              Positioned.fill(
+                child: Center(
+                  child: SingleChildScrollView(
+                    reverse: true,
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                      bloc: widget.authenticationBloc,
+                      builder: (context, state) {
+                        String uid = '';
+                        if(state is AuthenticationAuthenticated){
+                         uid = state.uid.toString();
+                        }
+                        return BlocBuilder<ProfileBloc,ProfileState>(
+                          bloc: widget.profileBloc,
+                          builder: (context,state) {
+
+                            if(state is ProfileViewStateLoading){
+                              widget.profileBloc.add(ProfileViewEvent(uid:uid));
+                            }
+                            if(state is ProfileViewStateSuccess){
+                              _email=state.person.email;
+                              _displayName = state.person.displayName;
+                              _fullName = state.person.fullName;
+                              _phoneNumber = state.person.phoneNumber;
+                              _photoUrl = state.person.photoUrl;
+                            } else if( state is ProfileEditState){
+                              isEditing = true;
+                            } else if(state is ProfileUpdateSuccessState ){
+                              isEditing = false;
+                              print(_photoUrlUpdate);
+                            } return WidgetProfile(
+                              onPressedEditProfile: (){
+                                widget.profileBloc.add(ProfileEditEvent(uid: uid));
+                              },
+                              onPressedChangeImage: onPressedChangeImage,
+                              onChangedDisplayName: (value){
+                                if(value!=null){
+                                  _displayNameUpdate = value;
+                                  _displayName = value;
+                                }else{
+                                  _displayNameUpdate = _displayName;
+                                }
+                              },
+                              onChangedFullName: (value){
+                                if(value!=null){
+                                  _fullNameUpdate = value;
+                                  _fullName = value;
+                                }else{
+                                  _fullNameUpdate = _fullName;
+                                }
+                              },
+                              onChangedPhoneNumber: (value){
+                                if(value!=null){
+                                  _phoneNumberUpdate = value;
+                                  _phoneNumber =value;
+                                }else{
+                                  _phoneNumberUpdate = _phoneNumber;
+                                }
+                              },
+                              onPressedSaveProfile: (){
+                                widget.profileBloc.add(ProfileUpdateEvent(
+                                  fullName: _fullNameUpdate,
+                                  uid: uid,
+                                  email: _email,
+                                  displayName: _displayNameUpdate,
+                                  photoUrl:_photoUrlUpdate,
+                                  phoneNumber: _phoneNumberUpdate,
+                                ));
+                                context.router.popAndPush(ProfileRoute(profileBloc: widget.profileBloc, authenticationBloc: widget.authenticationBloc));
+                              },
+                              email: _email,
+                              fullName: _fullName,
+                              displayName: _displayName,
+                              photoURL: _photoUrl,
+                              isEditing: isEditing,
+                              phoneNumber: _phoneNumber,
+                            );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
-                Positioned(
-                  top: screenHeight / 1.6,
-                  right: 0,
-                  left: 0,
-                  child: const Center(
-                    child: ProfileLayout(),
-                  ),
-                ),
-                /*---------------------Widget-------------------------*/
-                Positioned(
-                  top: 50,
-                  left: 15,
-                  width: screenWidth - 30,
-                  height: screenHeight / 1.5,
-                  child: WidgetProfile(
-                    emailTextController: _emailController,
-                    displayNameTextController: _displayNameController,
-                    photoUrlTextController: _photoUrlController,
-                    fullNameTextController: _fullNameController,
-                    phoneNumberTextController: _phoneNumberController,
-                    email: _email,
-                    displayName: _displayName,
-                    photoURL: _photoUrl,
-                    fullName: _fullName,
-                    isEditing: isEditing,
-                    phoneNumber: _phoneNumber,
-                  ),
-                ),
-                /*---------------------Widget-------------------------*/
-              ],
-            )),
+              ),
+              /*---------------------Widget-------------------------*/
+            ],
+          ),
+        ),
       ),
     );
   }

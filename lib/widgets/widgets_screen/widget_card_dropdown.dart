@@ -30,11 +30,14 @@ class _CustomCardState extends State<CustomCard> {
     super.initState();
     selectedValue = widget.dropdownValue;
   }
+
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+    final double screenWidth = size.width;
     return ConstrainedBox(
       constraints: const BoxConstraints(
-        maxHeight: 80,
+        maxHeight: 100,
       ),
       child: Card(
         elevation: 5,
@@ -48,32 +51,37 @@ class _CustomCardState extends State<CustomCard> {
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.titleText,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Container(
-                        width:100,
-                        child: Text(
-                          widget.subtitleText,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+                  Text(
+                    widget.titleText,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(
                     width: 5,
+                  ),
+                  Container(
+                    width: screenWidth - 150,
+                    child: Text(
+                      widget.subtitleText,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        color: Colors.black,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  const SizedBox(
+                    width: 110,
                   ),
                   DecoratedBox(
                     decoration: BoxDecoration(
@@ -82,7 +90,7 @@ class _CustomCardState extends State<CustomCard> {
                     ),
                     child: SizedBox(
                         width: 100,
-                        height: 40,
+                        height: 30,
                         child: Center(
                           child: Text(
                             widget.weightText,
@@ -90,47 +98,94 @@ class _CustomCardState extends State<CustomCard> {
                         )),
                   ),
                   const SizedBox(
-                    width: 5,
+                    width: 10,
                   ),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: const Color(0xFF00BCD4),
-                    ),
-                    child: SizedBox(
-                      width: 130,
-                      height: 40,
-                      child: Row(
-                        //mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const SizedBox(
-                            width: 15,
+                  DropdownButtonHideUnderline(
+                    child: DropdownButton2<String>(
+                      customButton: Container(
+                          width: 113,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: const Color(0xFF00BCD4),
                           ),
-                          const Text('Ratting:'),
-                          DropdownButtonHideUnderline(
-                            child: DropdownButton2<String>(
-                              value: selectedValue,
-                              items: widget.dropdownItems
-                                  .map((String value) =>
-                                      DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      ))
-                                  .toList(),
-                              onChanged: (value){
-                                widget.onDropdownChanged(value);
-                                setState(() {
-                                  selectedValue = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.only(left: 10, right: 0),
+                                child: Text('Ratting:'),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5, right: 0),
+                                child: Text('$selectedValue'),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.only(left: 0, right: 10),
+                                child: Icon(Icons.arrow_drop_down),
+                              ),
+
+
+                            ],
+                          )),
+                      value: selectedValue,
+                      items: widget.dropdownItems
+                          .map((String value) => DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              ))
+                          .toList(),
+                      onChanged: (value) {
+                        widget.onDropdownChanged(value);
+                        setState(() {
+                          selectedValue = value;
+                        });
+                      },
                     ),
-                  ),
+                  )
+                  // DecoratedBox(
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(10),
+                  //     color: const Color(0xFF00BCD4),
+                  //   ),
+                  //   // child: SizedBox(
+                  //   //   width: 130,
+                  //   //   height: 30,
+                  //   //   child: Row(
+                  //   //     mainAxisSize: MainAxisSize.max,
+                  //   //     children: [
+                  //   //       DropdownButtonHideUnderline(
+                  //   //         child: DropdownButton2<String>(
+                  //   //           customButton: Row(
+                  //   //             mainAxisSize: MainAxisSize.max,
+                  //   //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   //             children: [
+                  //   //               Text('Ratting $selectedValue'),
+                  //   //               const Icon(Icons.arrow_drop_down),
+                  //   //             ],
+                  //   //           ),
+                  //   //           value: selectedValue,
+                  //   //           items: widget.dropdownItems
+                  //   //               .map((String value) =>
+                  //   //               DropdownMenuItem<String>(
+                  //   //                 value: value,
+                  //   //                 child: Text(value),
+                  //   //               ))
+                  //   //               .toList(),
+                  //   //           onChanged: (value){
+                  //   //             widget.onDropdownChanged(value);
+                  //   //             setState(() {
+                  //   //               selectedValue = value;
+                  //   //             });
+                  //   //           },
+                  //   //         ),
+                  //   //       ),
+                  //   //     ],
+                  //   //   ),
+                  //   // ),
+                  // ),
                 ],
-              ),
+              )
             ],
           ),
         ),

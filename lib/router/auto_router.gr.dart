@@ -12,8 +12,9 @@ import 'package:auto_route/auto_route.dart' as _i16;
 import 'package:flutter/material.dart' as _i17;
 import 'package:usecasepointstool/bloc/authentication/authentication_bloc.dart'
     as _i18;
+import 'package:usecasepointstool/bloc/profile_bloc/profile_bloc.dart' as _i19;
 import 'package:usecasepointstool/bloc/use_case_point/use_case_points_bloc.dart'
-    as _i19;
+    as _i20;
 import 'package:usecasepointstool/screens/authentication/forgot_password_screen.dart'
     as _i1;
 import 'package:usecasepointstool/screens/authentication/login_screen.dart'
@@ -72,9 +73,14 @@ abstract class $AppRouter extends _i16.RootStackRouter {
       );
     },
     UseCasePointHistoryRoute.name: (routeData) {
+      final args = routeData.argsAs<UseCasePointHistoryRouteArgs>();
       return _i16.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i4.UseCasePointHistoryScreen(),
+        child: _i4.UseCasePointHistoryScreen(
+          key: args.key,
+          uid: args.uid,
+          authenticationBloc: args.authenticationBloc,
+        ),
       );
     },
     GetStartedRoute.name: (routeData) {
@@ -107,7 +113,8 @@ abstract class $AppRouter extends _i16.RootStackRouter {
         routeData: routeData,
         child: _i9.ProfileScreen(
           key: args.key,
-          currentUser: args.currentUser,
+          profileBloc: args.profileBloc,
+          authenticationBloc: args.authenticationBloc,
         ),
       );
     },
@@ -155,6 +162,7 @@ abstract class $AppRouter extends _i16.RootStackRouter {
           ecfFormBloc: args.ecfFormBloc,
           tcfFormBloc: args.tcfFormBloc,
           uawFormBloc: args.uawFormBloc,
+          authenticationBloc: args.authenticationBloc,
         ),
       );
     },
@@ -170,9 +178,13 @@ abstract class $AppRouter extends _i16.RootStackRouter {
       );
     },
     UseCasePointRoute.name: (routeData) {
+      final args = routeData.argsAs<UseCasePointRouteArgs>();
       return _i16.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i15.UseCasePointScreen(),
+        child: _i15.UseCasePointScreen(
+          key: args.key,
+          authenticationBloc: args.authenticationBloc,
+        ),
       );
     },
   };
@@ -270,16 +282,46 @@ class RegisterRouteArgs {
 
 /// generated route for
 /// [_i4.UseCasePointHistoryScreen]
-class UseCasePointHistoryRoute extends _i16.PageRouteInfo<void> {
-  const UseCasePointHistoryRoute({List<_i16.PageRouteInfo>? children})
-      : super(
+class UseCasePointHistoryRoute
+    extends _i16.PageRouteInfo<UseCasePointHistoryRouteArgs> {
+  UseCasePointHistoryRoute({
+    _i17.Key? key,
+    required String uid,
+    required _i18.AuthenticationBloc authenticationBloc,
+    List<_i16.PageRouteInfo>? children,
+  }) : super(
           UseCasePointHistoryRoute.name,
+          args: UseCasePointHistoryRouteArgs(
+            key: key,
+            uid: uid,
+            authenticationBloc: authenticationBloc,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'UseCasePointHistoryRoute';
 
-  static const _i16.PageInfo<void> page = _i16.PageInfo<void>(name);
+  static const _i16.PageInfo<UseCasePointHistoryRouteArgs> page =
+      _i16.PageInfo<UseCasePointHistoryRouteArgs>(name);
+}
+
+class UseCasePointHistoryRouteArgs {
+  const UseCasePointHistoryRouteArgs({
+    this.key,
+    required this.uid,
+    required this.authenticationBloc,
+  });
+
+  final _i17.Key? key;
+
+  final String uid;
+
+  final _i18.AuthenticationBloc authenticationBloc;
+
+  @override
+  String toString() {
+    return 'UseCasePointHistoryRouteArgs{key: $key, uid: $uid, authenticationBloc: $authenticationBloc}';
+  }
 }
 
 /// generated route for
@@ -343,13 +385,15 @@ class ImportRoute extends _i16.PageRouteInfo<void> {
 class ProfileRoute extends _i16.PageRouteInfo<ProfileRouteArgs> {
   ProfileRoute({
     _i17.Key? key,
-    required String currentUser,
+    required _i19.ProfileBloc profileBloc,
+    required _i18.AuthenticationBloc authenticationBloc,
     List<_i16.PageRouteInfo>? children,
   }) : super(
           ProfileRoute.name,
           args: ProfileRouteArgs(
             key: key,
-            currentUser: currentUser,
+            profileBloc: profileBloc,
+            authenticationBloc: authenticationBloc,
           ),
           initialChildren: children,
         );
@@ -363,16 +407,19 @@ class ProfileRoute extends _i16.PageRouteInfo<ProfileRouteArgs> {
 class ProfileRouteArgs {
   const ProfileRouteArgs({
     this.key,
-    required this.currentUser,
+    required this.profileBloc,
+    required this.authenticationBloc,
   });
 
   final _i17.Key? key;
 
-  final String currentUser;
+  final _i19.ProfileBloc profileBloc;
+
+  final _i18.AuthenticationBloc authenticationBloc;
 
   @override
   String toString() {
-    return 'ProfileRouteArgs{key: $key, currentUser: $currentUser}';
+    return 'ProfileRouteArgs{key: $key, profileBloc: $profileBloc, authenticationBloc: $authenticationBloc}';
   }
 }
 
@@ -381,8 +428,8 @@ class ProfileRouteArgs {
 class ECFRoute extends _i16.PageRouteInfo<ECFRouteArgs> {
   ECFRoute({
     _i17.Key? key,
-    required _i19.UseCasePointBloc useCasePointBloc,
-    required _i19.ECFFormBloc ecfFormBloc,
+    required _i20.UseCasePointBloc useCasePointBloc,
+    required _i20.ECFFormBloc ecfFormBloc,
     List<_i16.PageRouteInfo>? children,
   }) : super(
           ECFRoute.name,
@@ -409,9 +456,9 @@ class ECFRouteArgs {
 
   final _i17.Key? key;
 
-  final _i19.UseCasePointBloc useCasePointBloc;
+  final _i20.UseCasePointBloc useCasePointBloc;
 
-  final _i19.ECFFormBloc ecfFormBloc;
+  final _i20.ECFFormBloc ecfFormBloc;
 
   @override
   String toString() {
@@ -424,8 +471,8 @@ class ECFRouteArgs {
 class TCFRoute extends _i16.PageRouteInfo<TCFRouteArgs> {
   TCFRoute({
     _i17.Key? key,
-    required _i19.TCFFormBloc tcfFormBloc,
-    required _i19.UseCasePointBloc useCasePointBloc,
+    required _i20.TCFFormBloc tcfFormBloc,
+    required _i20.UseCasePointBloc useCasePointBloc,
     List<_i16.PageRouteInfo>? children,
   }) : super(
           TCFRoute.name,
@@ -452,9 +499,9 @@ class TCFRouteArgs {
 
   final _i17.Key? key;
 
-  final _i19.TCFFormBloc tcfFormBloc;
+  final _i20.TCFFormBloc tcfFormBloc;
 
-  final _i19.UseCasePointBloc useCasePointBloc;
+  final _i20.UseCasePointBloc useCasePointBloc;
 
   @override
   String toString() {
@@ -467,8 +514,8 @@ class TCFRouteArgs {
 class UAWRoute extends _i16.PageRouteInfo<UAWRouteArgs> {
   UAWRoute({
     _i17.Key? key,
-    required _i19.UAWFormBloc uawFormBloc,
-    required _i19.UseCasePointBloc useCasePointBloc,
+    required _i20.UAWFormBloc uawFormBloc,
+    required _i20.UseCasePointBloc useCasePointBloc,
     List<_i16.PageRouteInfo>? children,
   }) : super(
           UAWRoute.name,
@@ -495,9 +542,9 @@ class UAWRouteArgs {
 
   final _i17.Key? key;
 
-  final _i19.UAWFormBloc uawFormBloc;
+  final _i20.UAWFormBloc uawFormBloc;
 
-  final _i19.UseCasePointBloc useCasePointBloc;
+  final _i20.UseCasePointBloc useCasePointBloc;
 
   @override
   String toString() {
@@ -510,11 +557,12 @@ class UAWRouteArgs {
 class UCPRoute extends _i16.PageRouteInfo<UCPRouteArgs> {
   UCPRoute({
     _i17.Key? key,
-    required _i19.UseCasePointBloc useCasePointBloc,
-    required _i19.UUCWFormBloc uucpFormBloc,
-    required _i19.ECFFormBloc ecfFormBloc,
-    required _i19.TCFFormBloc tcfFormBloc,
-    required _i19.UAWFormBloc uawFormBloc,
+    required _i20.UseCasePointBloc useCasePointBloc,
+    required _i20.UUCWFormBloc uucpFormBloc,
+    required _i20.ECFFormBloc ecfFormBloc,
+    required _i20.TCFFormBloc tcfFormBloc,
+    required _i20.UAWFormBloc uawFormBloc,
+    required _i18.AuthenticationBloc authenticationBloc,
     List<_i16.PageRouteInfo>? children,
   }) : super(
           UCPRoute.name,
@@ -525,6 +573,7 @@ class UCPRoute extends _i16.PageRouteInfo<UCPRouteArgs> {
             ecfFormBloc: ecfFormBloc,
             tcfFormBloc: tcfFormBloc,
             uawFormBloc: uawFormBloc,
+            authenticationBloc: authenticationBloc,
           ),
           initialChildren: children,
         );
@@ -543,23 +592,26 @@ class UCPRouteArgs {
     required this.ecfFormBloc,
     required this.tcfFormBloc,
     required this.uawFormBloc,
+    required this.authenticationBloc,
   });
 
   final _i17.Key? key;
 
-  final _i19.UseCasePointBloc useCasePointBloc;
+  final _i20.UseCasePointBloc useCasePointBloc;
 
-  final _i19.UUCWFormBloc uucpFormBloc;
+  final _i20.UUCWFormBloc uucpFormBloc;
 
-  final _i19.ECFFormBloc ecfFormBloc;
+  final _i20.ECFFormBloc ecfFormBloc;
 
-  final _i19.TCFFormBloc tcfFormBloc;
+  final _i20.TCFFormBloc tcfFormBloc;
 
-  final _i19.UAWFormBloc uawFormBloc;
+  final _i20.UAWFormBloc uawFormBloc;
+
+  final _i18.AuthenticationBloc authenticationBloc;
 
   @override
   String toString() {
-    return 'UCPRouteArgs{key: $key, useCasePointBloc: $useCasePointBloc, uucpFormBloc: $uucpFormBloc, ecfFormBloc: $ecfFormBloc, tcfFormBloc: $tcfFormBloc, uawFormBloc: $uawFormBloc}';
+    return 'UCPRouteArgs{key: $key, useCasePointBloc: $useCasePointBloc, uucpFormBloc: $uucpFormBloc, ecfFormBloc: $ecfFormBloc, tcfFormBloc: $tcfFormBloc, uawFormBloc: $uawFormBloc, authenticationBloc: $authenticationBloc}';
   }
 }
 
@@ -568,8 +620,8 @@ class UCPRouteArgs {
 class UUCWRoute extends _i16.PageRouteInfo<UUCWRouteArgs> {
   UUCWRoute({
     _i17.Key? key,
-    required _i19.UseCasePointBloc useCasePointBloc,
-    required _i19.UUCWFormBloc uucwFormBloc,
+    required _i20.UseCasePointBloc useCasePointBloc,
+    required _i20.UUCWFormBloc uucwFormBloc,
     List<_i16.PageRouteInfo>? children,
   }) : super(
           UUCWRoute.name,
@@ -596,9 +648,9 @@ class UUCWRouteArgs {
 
   final _i17.Key? key;
 
-  final _i19.UseCasePointBloc useCasePointBloc;
+  final _i20.UseCasePointBloc useCasePointBloc;
 
-  final _i19.UUCWFormBloc uucwFormBloc;
+  final _i20.UUCWFormBloc uucwFormBloc;
 
   @override
   String toString() {
@@ -608,14 +660,38 @@ class UUCWRouteArgs {
 
 /// generated route for
 /// [_i15.UseCasePointScreen]
-class UseCasePointRoute extends _i16.PageRouteInfo<void> {
-  const UseCasePointRoute({List<_i16.PageRouteInfo>? children})
-      : super(
+class UseCasePointRoute extends _i16.PageRouteInfo<UseCasePointRouteArgs> {
+  UseCasePointRoute({
+    _i17.Key? key,
+    required _i18.AuthenticationBloc authenticationBloc,
+    List<_i16.PageRouteInfo>? children,
+  }) : super(
           UseCasePointRoute.name,
+          args: UseCasePointRouteArgs(
+            key: key,
+            authenticationBloc: authenticationBloc,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'UseCasePointRoute';
 
-  static const _i16.PageInfo<void> page = _i16.PageInfo<void>(name);
+  static const _i16.PageInfo<UseCasePointRouteArgs> page =
+      _i16.PageInfo<UseCasePointRouteArgs>(name);
+}
+
+class UseCasePointRouteArgs {
+  const UseCasePointRouteArgs({
+    this.key,
+    required this.authenticationBloc,
+  });
+
+  final _i17.Key? key;
+
+  final _i18.AuthenticationBloc authenticationBloc;
+
+  @override
+  String toString() {
+    return 'UseCasePointRouteArgs{key: $key, authenticationBloc: $authenticationBloc}';
+  }
 }

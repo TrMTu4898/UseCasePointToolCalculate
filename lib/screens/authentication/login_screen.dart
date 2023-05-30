@@ -81,15 +81,7 @@ class _LogInScreenState extends State<LogInScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: const Color(0xff50C2C9),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              context.pushRoute(const HomeRoute());
-              setState(() {
-                selectedIndex = 0;
-              });
-            },
-          ),
+          automaticallyImplyLeading: false,
           title: const Text(
             'SIGN IN',
             style: TextStyle(
@@ -253,6 +245,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   typeSignIn: 'Google',
                   imagePath:'assets/images/google.png',
                   onPressed: (){
+                    widget.authenticationBloc.add(SignInWithGoogle());
                   },
                 ),
                 const SizedBox(
@@ -262,7 +255,9 @@ class _LogInScreenState extends State<LogInScreen> {
                 SignInWithButton(
                     typeSignIn: 'Facebook',
                     imagePath: 'assets/images/facebook.png',
-                    onPressed: () {}
+                    onPressed: () {
+                      widget.authenticationBloc.add(SignInWithFacebook());
+                    }
                 ),
                 const SizedBox(
                   height: 8,

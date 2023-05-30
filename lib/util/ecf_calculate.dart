@@ -24,5 +24,5 @@ double calculateECF(
   }
   final ecf = 1.4 + (totalECF * -0.03);
 
-  return ecf.toDouble();
+  return double.parse(ecf.toStringAsFixed(2));
 }

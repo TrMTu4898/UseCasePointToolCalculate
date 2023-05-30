@@ -18,10 +18,9 @@ void main() async {
   );
 
   PersonRepository personRepository = PersonRepository();
-  Person person = Person(uid: '', fullName: '', email: '', displayName: '', photoUrl: '', phoneNumber: '');
-
+  Person person = Person(uid: '', email: '', displayName: '', photoUrl: '', phoneNumber: '', fullName: '');
   final authenticationBloc = AuthenticationBloc(personRepository: personRepository);
-  final profileBloc = ProfileBloc(person: person);
+  final profileBloc = ProfileBloc(personRepository: personRepository);
   final useCasePointBloc = UseCasePointBloc();
 
   final myAppBloc = MyAppBloc(
@@ -86,6 +85,7 @@ class _MyAppState extends State<MyApp>{
       routerConfig: _appRouter.config(),
       builder: EasyLoading.init(),
       debugShowCheckedModeBanner: false,
+
     );
   }
 }

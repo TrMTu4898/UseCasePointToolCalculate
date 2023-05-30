@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import '../bloc/authentication/authentication_bloc.dart';
+import '../bloc/profile_bloc/profile_bloc.dart';
 import '../data/models/person.dart';
 import '../data/repositories/person_repository.dart';
 import '../router/auto_router.gr.dart';
@@ -26,11 +27,11 @@ int selectedIndex = 0;
 class _HomeViewScreenState extends State<HomeViewScreen> {
   bool screenIndex = true;
 
-  String currentUser = '';
+  String uid = '';
   late PersonRepository personRepository;
-  late Person person;
   late AuthenticationBloc authenticationBloc;
   late SignUpFormBloc signUpFormBloc;
+  late ProfileBloc profileBloc;
 
   @override
   void didChangeDependencies() {
@@ -38,6 +39,7 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
     final myAppBlocData = MyAppBlocProvider.of(context);
     personRepository = PersonRepository();
     authenticationBloc = myAppBlocData.myAppBloc.authenticationBloc;
+    profileBloc = myAppBlocData.myAppBloc.profileBloc;
   }
 
   @override
@@ -119,13 +121,11 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
         }
         if (state is AuthenticationAuthenticated ) {
           setState(() {
-            person = state.user;
-            currentUser = person.uid;
-            print(currentUser);
+            uid = state.uid!;
           });
         } else if (state is AuthenticationUnauthenticated) {
           setState(() {
-            currentUser ='';
+            uid ='';
           });
         }
 
@@ -136,13 +136,14 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
               ? AutoTabsRouter.pageView(
             routes: [
               const HomeRoute(),
-              const UseCasePointRoute(),
-              const UseCasePointHistoryRoute(),
-              ProfileRoute(currentUser: currentUser),
+              UseCasePointRoute(authenticationBloc: authenticationBloc),
+              UseCasePointHistoryRoute(uid: uid, authenticationBloc: authenticationBloc),
+              ProfileRoute( profileBloc: profileBloc, authenticationBloc: authenticationBloc),
             ],
             physics: const NeverScrollableScrollPhysics(),
             builder: (context, child, _) {
               final tabsRouter = AutoTabsRouter.of(context);
+
               void onButtonSelected(int index) {
                 setState(() {
                   selectedIndex = index;
@@ -169,7 +170,7 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
               : AutoTabsRouter.pageView(
             routes: [
               const HomeRoute(),
-              const UseCasePointRoute(),
+               UseCasePointRoute(authenticationBloc: authenticationBloc),
               LogInRoute(authenticationBloc: authenticationBloc),
             ],
             physics: const NeverScrollableScrollPhysics(),

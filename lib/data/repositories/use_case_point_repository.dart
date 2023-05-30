@@ -12,7 +12,6 @@ class UseCasePointsRepository {
       FirebaseFirestore.instance.collection('Project');
 //Function create a new Use CasePoints
   Future<void> createUseCasePoints({
-    required String pid,
     required String uid,
     required UseCasePoint ucp,
     required UseCasePointsUUCP uucp,
@@ -21,7 +20,8 @@ class UseCasePointsRepository {
     required UseCasePointsECF ecf,
   }) async {
     try {
-      await _useCasePointsCollection.doc(pid).set({
+      DocumentReference documentRef = _useCasePointsCollection.doc();
+      Map<String, dynamic> data = {
         'uid': uid,
         'Name Project': ucp.nameProject,
         'Created Date ': DateTime.now(),
@@ -66,7 +66,9 @@ class UseCasePointsRepository {
           'DifficultProgrammingLanguage': ecf.e8,
           'ECF: ': ecf.ecf,
         }
-      });
+      };
+      await documentRef.set(data);
+      print('Dữ liệu đã được thêm thành công vào collection "UCP"');
     } catch (e, stackTrace) {
       _logger.severe('Failed to created Use Case Points:', e, stackTrace);
     }

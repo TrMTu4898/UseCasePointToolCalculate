@@ -8,6 +8,9 @@ import '../../data/models/person.dart';
 import '../../data/repositories/person_repository.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../my_app_bloc.dart';
+import '../profile_bloc/profile_bloc.dart';
+
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 part 'form_bloc/signup_form_bloc.dart';
@@ -16,47 +19,32 @@ part 'form_bloc/signup_form_bloc.dart';
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final PersonRepository _personRepository;
-  AuthenticationBloc({required PersonRepository personRepository})
+  final ProfileBloc? _profileBloc;
+  AuthenticationBloc({required PersonRepository personRepository, ProfileBloc? profileBloc})
       : _personRepository = personRepository,
+        _profileBloc = profileBloc,
         super(AuthenticationInitial()) {
-    on<AppStarted>(_onAppStarted);
     on<LogInRequested>(_onLogInRequested);
     on<LogoutRequested>(_onLogoutRequested);
     on<ClickButtonEvent>((event, emit) {
       emit(ClickButton());
     }
     );
+    on<CheckLoggedIn>(_onCheckLoggedIn);
     on<SignUpEvent>(_onSignUp);
-  }
-  Future<void> _onAppStarted(
-      AppStarted event, Emitter<AuthenticationState> emit)
-  async {
-    try{
-      final isSingedIn = await _personRepository.isSignedIn();
-      if(isSingedIn){
-        final user = await _personRepository.getUser();
-        if(user != null){
-          emit(AuthenticationAuthenticated(user: user));
-        }
-        else{
-          emit(const AuthenticationUnauthenticated(error: "Login unsuccessful!!"));
-        }
-      }
-      else{
-        emit(const AuthenticationUnauthenticated(error: "Login unsuccessful!!"));
-      }
-    }catch(_){
-      emit(const AuthenticationUnauthenticated(error: "Login unsuccessful!!"));
-    }
+    on<SignInWithGoogle>(_onSignInWithGoogle);
+    on<SignInWithFacebook>(_onSignInWithFacebook);
+    // on<SignOutWithGoogle>(_onSignOutWithGoogle);
+    // on<SignOutWithFacebook>(_onSignOutWithFacebook);
   }
   Future<void> _onLogInRequested(
       LogInRequested event, Emitter<AuthenticationState> emit)
   async {
     emit(AuthenticationLoading());
     try{
-      final Person user = (await _personRepository.signIn(email: event.email, password: event.password)) as Person;
+      final String? uid = await _personRepository.signIn(email: event.email, password: event.password) ;
       Fluttertoast.showToast(msg: 'Login success');
-      emit(AuthenticationAuthenticated(user: user));
+      emit(AuthenticationAuthenticated(uid: uid));
     }catch(e){
       print('error$e');
       emit(const AuthenticationUnauthenticated(error: "Login unsuccessful!!"));
@@ -70,29 +58,17 @@ class AuthenticationBloc
       emit(Unauthenticated());
   }
 
-  Future<void> _onSignUp( SignUpEvent event, Emitter<AuthenticationState> emit) async{
+  Future<void> _onSignUp(SignUpEvent event, Emitter<AuthenticationState> emit) async {
     emit(SignUpStateLoading());
     try {
-      final User? user = await _personRepository.signUp(
+      final Person? person = await _personRepository.signUp(
+        fullName: event.fullName,
         email: event.email,
         password: event.password,
       );
-
-      if (user != null) {
-        // Đăng ký thành công, tạo đối tượng Person và cập nhật trạng thái
-        final Person currentUser = Person(
-          displayName: event.fullName,
-            email: event.email,
-            fullName: event.fullName,
-            phoneNumber: '',
-            photoUrl: 'https://fiverr-res.cloudinary.com/t_mobile_web_2,q_auto,f_auto/gigs/223707076/original/56c8ceb28a6e47c9ca11b2213c09cb7728461541.png?fbclid=IwAR315H9zjgoxqiiONT4Or5lUTG96ipSBfV7SQEv3wtJuwlBRJXcbMnv3QMI',
-            uid: user.uid,
-        );
-        Fluttertoast.showToast(msg: 'SignUp success');
-        emit(SignUpStateSuccess(currentUser: currentUser));
+      if (person != null) {
+        emit(SignUpStateSuccess(currentUser: person));
       } else {
-        // Đăng ký không thành công
-        print('123');
         emit(SignUpStateFailure());
       }
     } catch (e) {
@@ -100,4 +76,92 @@ class AuthenticationBloc
       emit(SignUpStateFailure());
     }
   }
+  Future<void> _onCheckLoggedIn(CheckLoggedIn event, Emitter<AuthenticationState> emit) async {
+    try {
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final String uid = user.uid;
+        emit(AuthenticationAuthenticated(uid: uid));
+      } else {
+        emit(Unauthenticated());
+      }
+    } catch (e) {
+      print('Error $e');
+      emit(Unauthenticated());
+    }
+  }
+
+  Future<void> _onSignInWithGoogle(
+      SignInWithGoogle event,
+      Emitter<AuthenticationState> emit,
+      ) async {
+    // Xử lý đăng nhập bằng Google
+    try {
+      final UserCredential userCredential = await _personRepository.signInWithGoogle();
+
+      if (userCredential.user != null) {
+        final User user = userCredential.user!;
+        emit(AuthenticationAuthenticated(uid: user.uid));
+      } else {
+
+        emit(const AuthenticationUnauthenticated(error: "Failed to sign in with Google"));
+      }
+    } catch (e) {
+      print('Error $e');
+
+      emit(const AuthenticationUnauthenticated(error: "Failed to sign in with Google"));
+    }
+  }
+
+  Future<void> _onSignInWithFacebook(
+      SignInWithFacebook event,
+      Emitter<AuthenticationState> emit,
+      ) async {
+    try {
+      final UserCredential userCredential = await _personRepository.signInWithFacebook();
+      if (userCredential.user != null) {
+        final User user = userCredential.user!;
+        emit(AuthenticationAuthenticated(uid: user.uid));
+      } else {
+        emit(const AuthenticationUnauthenticated(error: "Failed to sign in with Facebook"));
+      }
+    } catch (e) {
+      print('Error $e');
+      emit(const AuthenticationUnauthenticated(error: "Failed to sign in with Facebook"));
+    }
+  }
+
+  // Future<void> _onSignOutWithGoogle(
+  //     SignOutWithGoogle event,
+  //     Emitter<AuthenticationState> emit,
+  //     ) async {
+  //   // Xử lý đăng xuất Google
+  //   try {
+  //     await _personRepository.signOutWithGoogle();
+  //     // Emit sự kiện đăng xuất thành công
+  //     emit(Unauthenticated());
+  //   } catch (e) {
+  //     print('Error $e');
+  //     // Emit sự kiện đăng xuất thất bại và hiển thị lỗi
+  //     emit(const AuthenticationUnauthenticated(error: "Failed to sign out with Google"));
+  //   }
+  // }
+
+  // Future<void> _onSignOutWithFacebook(
+  //     SignOutWithFacebook event,
+  //     Emitter<AuthenticationState> emit,
+  //     ) async {
+  //   // Xử lý đăng xuất Facebook
+  //   try {
+  //     await _personRepository.signOutWithFacebook();
+  //     // Emit sự kiện đăng xuất thành công
+  //     emit(Unauthenticated());
+  //   } catch (e) {
+  //     print('Error $e');
+  //     // Emit sự kiện đăng xuất thất bại và hiển thị lỗi
+  //     emit(const AuthenticationUnauthenticated(error: "Failed to sign out with Facebook"));
+  //   }
+  // }
+
 }
+

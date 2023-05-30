@@ -19,5 +19,15 @@ class TCFFormBloc extends FormBloc<String, String> {
     emitSuccess(canSubmitAgain: true);
   }
   void onSuccess() async {}
+
+  Map<String, String> getDropValue() {
+    final Map<String, String> dropValues = {};
+    for (var i = 0; i < dropdownFieldBlocs.length; i++) {
+      final bloc = dropdownFieldBlocs[i];
+      final values = bloc.state.value;
+      dropValues['dropdown_$i'] = values.isNotEmpty ? values.join(',') : '0';
+    }
+    return dropValues;
+  }
   }
 

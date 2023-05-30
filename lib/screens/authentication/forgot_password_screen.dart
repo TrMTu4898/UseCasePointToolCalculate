@@ -40,13 +40,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       backgroundColor: const Color(0xFFEEEEEE),
       appBar: AppBar(
         backgroundColor: const Color(0xff50C2C9),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // xử lý sự kiện khi người dùng click vào icon back
-            router.pop(true);
-          },
-        ),
+        automaticallyImplyLeading: false,
         title: const Text(
           'Khôi phục tài khoản',
           style: TextStyle(

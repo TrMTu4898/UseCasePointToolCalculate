@@ -29,5 +29,5 @@ double calculateTCF(
   }
   final tcf = 0.6 + (totalTCF / 100);
 
-  return tcf.toDouble();
+  return double.parse(tcf.toStringAsFixed(2));
 }

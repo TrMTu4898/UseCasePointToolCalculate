@@ -13,7 +13,6 @@ class UseCasePoint {
   UseCasePointsECF ecf;
   double ucp;
   String uid;
-  String pid;
 
   UseCasePoint({
     required this.nameProject,
@@ -25,6 +24,5 @@ class UseCasePoint {
     required this.uaw,
     required this.ucp,
     required this.uid,
-    required this.pid,
   });
 }

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">usecasepointtool</string>
+    <string name="facebook_app_id">622200629547202</string>
+    <string name="facebook_client_token">bc610e0577685c450e2140da5b7c601c</string>
+    <string name="fb_login_protocol_scheme">fb622200629547202</string>
+
+</resources>

@@ -49,3 +49,16 @@ class SignUpEvent extends AuthenticationEvent {
   @override
   List<Object> get props => [email, password, confirmPassword, fullName];
 }
+
+class ViewProfileEvent extends AuthenticationEvent {}
+
+class EditProfileEvent extends AuthenticationEvent {}
+
+class CheckLoggedIn extends AuthenticationEvent{}
+
+class SignInWithGoogle extends AuthenticationEvent{}
+
+class SignInWithFacebook extends AuthenticationEvent{}
+class SignOutWithGoogle extends AuthenticationEvent{}
+class SignOutWithFacebook extends AuthenticationEvent{}
+

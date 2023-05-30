@@ -17,11 +17,11 @@ class AuthenticationLoading extends AuthenticationState{
 }
 
 class AuthenticationAuthenticated extends AuthenticationState {
-  final Person user;
-  const AuthenticationAuthenticated({required this.user});
+  final String? uid;
+  const AuthenticationAuthenticated({required this.uid});
 
   @override
-  List<Object?> get props => [user];
+  List<Object?> get props => [uid];
 }
 
 class AuthenticationUnauthenticated extends AuthenticationState {
@@ -76,3 +76,4 @@ class SignUpStateFailure extends AuthenticationState {
   @override
   List<Object?> get props => [];
 }
+

@@ -7,6 +7,8 @@ import 'package:usecasepointstool/widgets/button/button_calculate.dart';
 import 'package:usecasepointstool/widgets/button/button_widget.dart';
 import 'package:usecasepointstool/widgets/widgets_screen/widget_table.dart';
 
+import '../../../widgets/text/text_field_bloc_builder.dart';
+
 @RoutePage()
 class UAWPage extends StatefulWidget {
   final UseCasePointBloc useCasePointBloc;
@@ -41,8 +43,10 @@ class _UAWPageState extends State<UAWPage> {
   final FocusNode nodeOne = FocusNode();
   final FocusNode nodeTwo = FocusNode();
   final FocusNode nodeThree = FocusNode();
-  double paddingTextTop = 10.0;
-  double paddingTextBottom = 10.0;
+  double paddingTextTop = 5;
+  double paddingTextBottom = 5;
+  double paddingTextLeft = 15;
+  double paddingTextRight = 15;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +59,7 @@ class _UAWPageState extends State<UAWPage> {
         backgroundColor: const Color(0xFFF5F5F5),
         appBar: AppBar(
           backgroundColor: const Color(0xFF50C2C9),
+          automaticallyImplyLeading: false,
           title: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -122,374 +127,128 @@ class _UAWPageState extends State<UAWPage> {
                   left: 0,
                   child: TopLeftLayout(),
                 ),
-                Positioned(
-                  top: 50,
-                  left: 0,
-                  right: 0,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: Container(
-                          width: screenWidth - 30,
-                          child: WidgetTable(
-                            data: data,
-                            header: header,
-                          ),
-                        ),
+                Positioned.fill(
+                  child: Center(
+                    child: SingleChildScrollView(
+                      reverse: true,
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Container(
-                          width: screenWidth - 30,
-                          child: const Center(
-                            child: Text(
-                              'Table 2: Calculate UAW',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontStyle: FontStyle.italic,
-                                fontSize: 14,
-                                color: Colors.blue,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5, bottom: 5),
+                            child: Container(
+                              width: screenWidth - 30,
+                              child: WidgetTable(
+                                data: data,
+                                header: header,
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                      SafeArea(
-                        minimum:
-                            const EdgeInsets.only(top: 20, left: 15, right: 15),
-                        child: ListView(
-                          shrinkWrap: true,
-                          physics: const ClampingScrollPhysics(),
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: paddingTextTop,
-                                  bottom: paddingTextBottom),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                    color: colorTextField, // Màu nền
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            child: Container(
+                              width: screenWidth - 30,
+                              child: const Center(
+                                child: Text(
+                                  'Table 2: Calculate UAW',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                    fontSize: 14,
+                                    color: Colors.blue,
                                   ),
-                                  child: Row(
-                                    children: [
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Expanded(
-                                        child: TextFieldBlocBuilder(
-                                          textFieldBloc:
-                                              widget.uawFormBloc.simpleActors,
-                                          keyboardType: TextInputType.number,
-                                          decoration: const InputDecoration(
-                                            hintText:
-                                                'Enter number of Simple Actors',
-                                            //border: OutlineInputBorder(),
-                                            hintStyle: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                            border: OutlineInputBorder(
-                                              borderSide: BorderSide.none,
-                                            ),
-                                          ),
-                                          textInputAction: TextInputAction.next,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _simpleActor =
-                                                  int.tryParse(value) ?? 0;
-                                              data[0][3] =
-                                                  _simpleActor.toString();
-                                            });
-                                          },
-                                          onSubmitted: (value) {
-                                            // Xử lý khi nhấn nút "OK"
-                                            // Chuyển đến TextFieldBlocBuilder tiếp theo
-
-                                            FocusScope.of(context)
-                                                .requestFocus(nodeTwo);
-                                          },
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: paddingTextTop,
-                                  bottom: paddingTextBottom),
-                              child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                    color: colorTextField,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Expanded(
-                                        child: TextFieldBlocBuilder(
-                                          focusNode: nodeTwo,
-                                          textFieldBloc:
-                                              widget.uawFormBloc.averageActors,
-                                          keyboardType: TextInputType.number,
-                                          decoration: const InputDecoration(
-                                            hintText:
-                                                'Enter number of Average Actors',
-                                            // border: OutlineInputBorder(),
-                                            hintStyle: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                            border: OutlineInputBorder(
-                                              borderSide: BorderSide.none,
-                                            ),
-                                          ),
-                                          textInputAction: TextInputAction.next,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _averageActor =
-                                                  int.tryParse(value) ?? 0;
-                                              data[1][3] =
-                                                  _averageActor.toString();
-                                            });
-                                          },
-                                          onSubmitted: (value) {
-                                            // Xử lý khi nhấn nút "OK"
-                                            // Chuyển đến TextFieldBlocBuilder tiếp theo
-
-                                            FocusScope.of(context)
-                                                .requestFocus(nodeThree);
-                                          },
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  top: paddingTextTop,
-                                  bottom: paddingTextBottom),
-                              child: Container(
-                                  //width: screenWidth - 50,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(25),
-                                    color: colorTextField,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Expanded(
-                                        child: TextFieldBlocBuilder(
-                                          focusNode: nodeThree,
-                                          textFieldBloc:
-                                              widget.uawFormBloc.complexActors,
-                                          keyboardType: TextInputType.number,
-                                          decoration: const InputDecoration(
-                                            hintText:
-                                                'Enter number of Complex Actors',
-                                            //border: OutlineInputBorder(),
-                                            hintStyle: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                            border: OutlineInputBorder(
-                                              borderSide: BorderSide.none,
-                                            ),
-                                          ),
-                                          textInputAction: TextInputAction.done,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _complexActor =
-                                                  int.tryParse(value) ?? 0;
-                                              data[2][3] =
-                                                  _complexActor.toString();
-                                            });
-                                          },
-                                          onSubmitted: (value) {
-                                            onPressed:
-                                            widget.uawFormBloc.submit();
-                                          },
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 20, bottom: 20),
-                              child: Center(
-                                child: ButtonWidget(
-                                  onPressed: widget.uawFormBloc.submit,
-                                  title: 'Calculate',
-                                  backgroundColor: const Color(0xFF50C2C9),
-                                  textColor: Colors.white,
-                                  radiusCircular: 24,
-                                  textSize: 18,
-                                  sizeButton:
-                                      Size(screenWidth / 1.3, screenWidth / 8),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Positioned(
-                  top: screenHeight / 1.7,
-                  right: -10,
-                  width: 234,
-                  height: 218,
-                  child: Image.asset(
-                    'assets/images/image_uaw.png',
-                    fit: BoxFit.cover,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: paddingTextTop, bottom: paddingTextBottom,left: paddingTextLeft,right: paddingTextRight),
+                            child: WidgetTextFieldBloc(
+                              prefixIcon: null,
+                              onSubmitted: (value) {
+                                FocusScope.of(context).requestFocus(nodeTwo);
+                              },
+                              onChange: (value) {
+                                setState(() {
+                                  _simpleActor = int.tryParse(value) ?? 0;
+                                  data[0][3] = _simpleActor.toString();
+                                });
+                              },
+                              hintText: 'Enter number of Simple Use Case',
+                              focusNode: null,
+                              textFieldBloc: widget.uawFormBloc.simpleActors,
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.next,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: paddingTextTop, bottom: paddingTextBottom,left: paddingTextLeft,right: paddingTextRight),
+                            child: WidgetTextFieldBloc(
+                              prefixIcon: null,
+                              onSubmitted: (value) {
+                                FocusScope.of(context).requestFocus(nodeThree);
+                              },
+                              onChange: (value) {
+                                setState(() {
+                                  _averageActor = int.tryParse(value) ?? 0;
+                                  data[1][3] = _averageActor.toString();
+                                });
+                              },
+                              hintText: 'Enter number of Average Use Case',
+                              focusNode: nodeTwo,
+                              textFieldBloc: widget.uawFormBloc.averageActors,
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.next,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: paddingTextTop, bottom: paddingTextBottom,left: paddingTextLeft,right: paddingTextRight),
+                            child: WidgetTextFieldBloc(
+                              textInputAction: TextInputAction.done,
+                              keyboardType: TextInputType.number,
+                              textFieldBloc: widget.uawFormBloc.complexActors,
+                              focusNode: nodeThree,
+                              hintText: 'Enter number of Complex Use Case',
+                              onChange: (value) {
+                                setState(() {
+                                  _complexActor = int.tryParse(value) ?? 0;
+                                  data[2][3] = _complexActor.toString();
+                                });
+                              },
+                              onSubmitted: (value) {
+                                onPressed:
+                                widget.uawFormBloc.submit();
+                              },
+                              prefixIcon: null,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5, bottom: 0),
+                            child: Center(
+                              child: ButtonWidget(
+                                onPressed: widget.uawFormBloc.submit,
+                                title: 'Calculate',
+                                backgroundColor: const Color(0xFF50C2C9),
+                                textColor: Colors.white,
+                                radiusCircular: 24,
+                                textSize: 18,
+                                sizeButton:
+                                    Size(screenWidth / 1.3, screenWidth / 8),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
               ],
             )));
-    //       SafeArea(
-    //         child: Stack(
-    //           children: [
-    //             Positioned(
-    //                 top: screenHeight / 3.5,
-    //                 left: 15,
-    //                 width: screenWidth - 30,
-    //                 child: ListView(
-    //                     shrinkWrap: true,
-    //                     physics: const ClampingScrollPhysics(),
-    //                     children: [
-    //                       TextFieldBlocBuilder(
-    //                         textFieldBloc: widget.uawFormBloc.simpleActors,
-    //                         keyboardType: TextInputType.number,
-    //                         decoration: const InputDecoration(
-    //                             hintText: 'Enter number of Simple Actor',
-    //                             border: OutlineInputBorder(),
-    //                             hintStyle:
-    //                                 TextStyle(fontWeight: FontWeight.bold)),
-    //                         onChanged: (value) {
-    //                           setState(() {
-    //                             _simpleActor = int.tryParse(value) ?? 0;
-    //                             data[1][3] = _simpleActor.toString();
-    //                           });
-    //                         },
-    //                       ),
-    //                       TextFieldBlocBuilder(
-    //                         textFieldBloc: widget.uawFormBloc.averageActors,
-    //                         keyboardType: TextInputType.number,
-    //                         decoration: const InputDecoration(
-    //                             hintText: 'Enter number of Average Actor',
-    //                             border: OutlineInputBorder(),
-    //                             hintStyle:
-    //                                 TextStyle(fontWeight: FontWeight.bold)),
-    //                         onChanged: (value) {
-    //                           setState(() {
-    //                             _averageActor = int.tryParse(value) ?? 0;
-    //                             data[2][3] = _averageActor.toString();
-    //                           });
-    //                         },
-    //                       ),
-    //                       TextFieldBlocBuilder(
-    //                         textFieldBloc: widget.uawFormBloc.complexActors,
-    //                         keyboardType: TextInputType.number,
-    //                         decoration: const InputDecoration(
-    //                             hintText: 'Enter number of Complex Actor',
-    //                             border: OutlineInputBorder(),
-    //                             hintStyle:
-    //                                 TextStyle(fontWeight: FontWeight.bold)),
-    //                         onChanged: (value) {
-    //                           setState(() {
-    //                             _complexActor = int.tryParse(value) ?? 0;
-    //                             data[3][3] = _complexActor.toString();
-    //                           });
-    //                         },
-    //                       ),
-    //                     ])),
-    //             Positioned(
-    //               top: MediaQuery.of(context).padding.top,
-    //               left: 0,
-    //               child: const TopLeftLayout(),
-    //             ),
-    //             Positioned(
-    //               top: screenHeight / 8,
-    //               left: 15,
-    //               width: screenWidth - 30,
-    //               child: WidgetTable(
-    //                 data: data,
-    //                 header: header,
-    //               ),
-    //             ),
-    //             Positioned(
-    //               top: MediaQuery.of(context).padding.top + 20,
-    //               left: 0,
-    //               right: 0,
-    //               child: Center(
-    //                 child: Stack(
-    //                   children: [
-    //                     Image.asset('assets/images/App_bar_without_menu.png'),
-    //                     const Positioned(
-    //                       top: 15,
-    //                       left: 20,
-    //                       child: Center(
-    //                         child: Text(
-    //                           'Main UAW',
-    //                           style: TextStyle(
-    //                             color: Color(0xFF50C2C9),
-    //                             fontSize: 24,
-    //                             fontWeight: FontWeight.bold,
-    //                           ),
-    //                         ),
-    //                       ),
-    //                     ),
-    //                     const Positioned(
-    //                       top: 15,
-    //                       right: 20,
-    //                       child: Center(
-    //                         child: Text(
-    //                           '2/5',
-    //                           style: TextStyle(
-    //                             color: Color(0xFF50C2C9),
-    //                             fontSize: 24,
-    //                             fontWeight: FontWeight.bold,
-    //                           ),
-    //                         ),
-    //                       ),
-    //                     ),
-    //                   ],
-    //                 ),
-    //               ),
-    //             ),
-    //             Positioned(
-    //               top: screenHeight / 1.6,
-    //               right: -10,
-    //               width: 234,
-    //               height: 218,
-    //               child: Image.asset(
-    //                 'assets/images/image_uaw.png',
-    //                 fit: BoxFit.cover,
-    //               ),
-    //             ),
-    //             Positioned(
-    //               top: screenHeight / 1.75,
-    //               right: 0,
-    //               left: 0,
-    //               child: Center(
-    //                 child:
-    //                     CalculateButton(onPressed: widget.uawFormBloc.submit),
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    // );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import '../../layout/top_left_layout.dart';
 import '../../router/auto_router.gr.dart';
@@ -25,6 +26,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final Size size = MediaQuery.of(context).size;
     final double screenWidth = size.width;
     final double screenHeight = size.height;
+    final myAppBlocData = MyAppBlocProvider.of(context);
+    final AuthenticationBloc authenticationBloc = myAppBlocData.myAppBloc.authenticationBloc;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -35,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
             color: Colors.white,
           ),
         ),
+        automaticallyImplyLeading: false,
         shape: const ContinuousRectangleBorder(
             borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(20),
@@ -56,18 +60,28 @@ class _HomeScreenState extends State<HomeScreen> {
               top: screenHeight / 25,
               width: screenWidth,
               child: Center(
-                child: UseCasePointButton(
-                  onPressed: () {
-                    final myAppBlocData = MyAppBlocProvider.of(context);
-                    final AuthenticationBloc authenticationBloc = myAppBlocData.myAppBloc.authenticationBloc;
-                    authenticationBloc.add(ClickButtonEvent());
-                    context.navigateTo(const UseCasePointRoute());
-                    final tabsRouter = AutoTabsRouter.of(context);
-
+                child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                  bloc: authenticationBloc,
+                  builder: (context, state) {
+                    late String currentUser = '';
+                    if (state is AuthenticationLoading) {
+                      return const CircularProgressIndicator();
+                    } else if (state is AuthenticationUnauthenticated) {
+                      currentUser = '';
+                    } else if (state is AuthenticationAuthenticated){
+                      currentUser = state.uid.toString();
+                    }
+                    return UseCasePointButton(
+                      onPressed: () {
+                        authenticationBloc.add(ClickButtonEvent());
+                        context.navigateTo(UseCasePointRoute(authenticationBloc: authenticationBloc));
+                      },
+                    );
                   },
                 ),
               ),
             ),
+
             Positioned(
               top: screenHeight / 2.3,
               width: screenWidth,
