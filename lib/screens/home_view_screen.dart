@@ -137,7 +137,7 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
             routes: [
               const HomeRoute(),
               UseCasePointRoute(authenticationBloc: authenticationBloc),
-              UseCasePointHistoryRoute(uid: uid, authenticationBloc: authenticationBloc),
+              UseCasePointHistoryRoute(authenticationBloc: authenticationBloc),
               ProfileRoute( profileBloc: profileBloc, authenticationBloc: authenticationBloc),
             ],
             physics: const NeverScrollableScrollPhysics(),

@@ -2,6 +2,9 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:usecasepointstool/data/models/use_case_points.dart';
+import 'package:usecasepointstool/data/repositories/use_case_point_repository.dart';
 import '../../data/repositories/person_repository.dart';
 import '../../layout/top_left_layout.dart';
 import '../../router/auto_router.gr.dart';
@@ -12,22 +15,26 @@ import '../../bloc/authentication/authentication_bloc.dart';
 
 @RoutePage()
 class UseCasePointHistoryScreen extends StatefulWidget {
-  final String uid;
   final AuthenticationBloc authenticationBloc;
-  const UseCasePointHistoryScreen({Key? key, required this.uid, required this.authenticationBloc}) : super(key: key);
+  const UseCasePointHistoryScreen({Key? key, required this.authenticationBloc})
+      : super(key: key);
   @override
   _UseCasePointHistoryScreenState createState() =>
       _UseCasePointHistoryScreenState();
 }
 
 class _UseCasePointHistoryScreenState extends State<UseCasePointHistoryScreen> {
-
+  String currentuser = '';
+  List<Project> data = [];
+  String name = '';
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final double screenWidth = size.width;
     final double screenHeight = size.height;
-    final PersonRepository personRepository = PersonRepository();
+    final UseCasePointsRepository useCasePointsRepository =
+        UseCasePointsRepository();
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -46,21 +53,24 @@ class _UseCasePointHistoryScreenState extends State<UseCasePointHistoryScreen> {
         )),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search, size: 30,),
+            icon: const Icon(
+              Icons.search,
+              size: 30,
+            ),
             onPressed: () {
               // Do something when the search button is pressed
             },
           ),
         ],
         leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-              context.pushRoute(const HomeRoute());
-              setState(() {
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            context.pushRoute(const HomeRoute());
+            setState(() {
               selectedIndex = 0;
-              });
-              },
-      ),
+            });
+          },
+        ),
         backgroundColor: const Color(0xff50C2C9),
       ),
       body: SafeArea(
@@ -72,91 +82,57 @@ class _UseCasePointHistoryScreenState extends State<UseCasePointHistoryScreen> {
               left: 0,
               child: TopLeftLayout(),
             ),
-            Positioned(
-              top: screenHeight / 30,
+            Positioned.fill(
+              top: 50,
               right: 15,
-              height: screenHeight / 1.3,
-              width: screenWidth - 30,
-              child: SingleChildScrollView(
-                padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    BlocBuilder<AuthenticationBloc,AuthenticationState>(
-                      bloc:widget.authenticationBloc,
-                      builder: (context, state){
-                        late String currentuser1 = 'ugsgiRMIVIT8ADVIwNXV7mP8Sd83';
-                        List<Map<String, dynamic>> data = [];
-                        if(state is AuthenticationLoading){
-
-                        }else if(state is AuthenticationAuthenticated){
-                          currentuser1 = state.uid.toString();
-                          print(currentuser1);
-                        }
-                        return const WidgetHistoryCard(
-                            nameText: 'nameText',
-                            dateCreated: 'dateCreated',
-                            information: 'information',
-                            numericalOrder: '1',
-                        );
-                      },
-                    )
-                  ],
-                )
-              )
-              // Center(
-              //   child: ListView(
-              //     shrinkWrap: true,
-              //     physics: const ClampingScrollPhysics(),
-              //     children: const [
-              //       WidgetHistoryCard(
-              //         nameText: 'Test1',
-              //         dateCreated: '14/05/2003',
-              //         information: 'information',
-              //         numericalOrder: '1',
-              //       ),
-              //       // WidgetHistoryCard(
-              //       //   nameText: 'Test1',
-              //       //   dateCreated: '14/05/2003',
-              //       //   information: 'information',
-              //       //   numericalOrder: '1',
-              //       // ),
-              //       // WidgetHistoryCard(
-              //       //   nameText: 'Test1',
-              //       //   dateCreated: '14/05/2003',
-              //       //   information: 'information',
-              //       //   numericalOrder: '1',
-              //       // ),
-              //       // WidgetHistoryCard(
-              //       //   nameText: 'Test1',
-              //       //   dateCreated: '14/05/2003',
-              //       //   information: 'information',
-              //       //   numericalOrder: '1',
-              //       // ),
-              //       // WidgetHistoryCard(
-              //       //   nameText: 'Test1',
-              //       //   dateCreated: '14/05/2003',
-              //       //   information: 'information',
-              //       //   numericalOrder: '1',
-              //       // ),
-              //       // WidgetHistoryCard(
-              //       //   nameText: 'Test1',
-              //       //   dateCreated: '14/05/2003',
-              //       //   information: 'information',
-              //       //   numericalOrder: '1',
-              //       // ),
-              //       // WidgetHistoryCard(
-              //       //   nameText: 'Test1',
-              //       //   dateCreated: '14/05/2003',
-              //       //   information: 'information',
-              //       //   numericalOrder: '1',
-              //       // ),
-              //     ],
-              //   ),
-              // ),
-            )
+              left: 15,
+              child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                bloc: widget.authenticationBloc,
+                builder: (context, state) {
+                  print(state);
+                  if (state is AuthenticationLoading) {
+                  } else if (state is AuthenticationAuthenticated) {
+                    currentuser = state.uid.toString();
+                    void getProject() async {
+                      data = await useCasePointsRepository
+                          .getProjectsByUid(currentuser);
+                    }
+                    getProject();
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                        physics: const ClampingScrollPhysics(),
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          return ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.all(0), // Remove padding
+                              elevation: 0, // Remove elevation
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10), // Remove border radius
+                              ),
+                              maximumSize:  Size(screenWidth-30, 120),
+                            ),
+                            onPressed: () {},
+                            child: WidgetHistoryCard(
+                              nameText: data[index].nameProject,
+                              dateCreated: DateFormat('dd/MM/yyyy')
+                                  .format(data[index].createdProject)
+                                  .toString(),
+                              information: 'information',
+                              numericalOrder: (index + 1).toString(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

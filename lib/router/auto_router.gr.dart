@@ -78,7 +78,6 @@ abstract class $AppRouter extends _i16.RootStackRouter {
         routeData: routeData,
         child: _i4.UseCasePointHistoryScreen(
           key: args.key,
-          uid: args.uid,
           authenticationBloc: args.authenticationBloc,
         ),
       );
@@ -286,14 +285,12 @@ class UseCasePointHistoryRoute
     extends _i16.PageRouteInfo<UseCasePointHistoryRouteArgs> {
   UseCasePointHistoryRoute({
     _i17.Key? key,
-    required String uid,
     required _i18.AuthenticationBloc authenticationBloc,
     List<_i16.PageRouteInfo>? children,
   }) : super(
           UseCasePointHistoryRoute.name,
           args: UseCasePointHistoryRouteArgs(
             key: key,
-            uid: uid,
             authenticationBloc: authenticationBloc,
           ),
           initialChildren: children,
@@ -308,19 +305,16 @@ class UseCasePointHistoryRoute
 class UseCasePointHistoryRouteArgs {
   const UseCasePointHistoryRouteArgs({
     this.key,
-    required this.uid,
     required this.authenticationBloc,
   });
 
   final _i17.Key? key;
 
-  final String uid;
-
   final _i18.AuthenticationBloc authenticationBloc;
 
   @override
   String toString() {
-    return 'UseCasePointHistoryRouteArgs{key: $key, uid: $uid, authenticationBloc: $authenticationBloc}';
+    return 'UseCasePointHistoryRouteArgs{key: $key, authenticationBloc: $authenticationBloc}';
   }
 }
 

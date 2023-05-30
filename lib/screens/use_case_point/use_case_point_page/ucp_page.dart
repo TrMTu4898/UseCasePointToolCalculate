@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../data/models/use_case_points_ecf.dart';
 import '../../../data/models/use_case_points_tcf.dart';
 import '../../../data/models/use_case_points_uaw.dart';
-import '../../../data/models/use_case_points_uucp.dart';
+import '../../../data/models/use_case_points_uucw.dart';
 import '../../../bloc/authentication/authentication_bloc.dart';
 import '../../../bloc/use_case_point/use_case_points_bloc.dart';
 import '../../../data/models/use_case_points.dart';
@@ -72,11 +72,11 @@ class _UCPPageState extends State<UCPPage> {
     final Map<String, String> dropValuesTCF = widget.tcfFormBloc.getDropValue();
     final Map<String, String> dropValuesECF = widget.tcfFormBloc.getDropValue();
 
-    UseCasePointsUUCP ucpUUCW = UseCasePointsUUCP(
+    UseCasePointsUUCW ucpUUCW = UseCasePointsUUCW(
       simple: simpleUUCP,
       average: averageUUCP,
       complex: complexUUCP,
-      uucp: uucw,
+      uucw: uucw,
     );
     UseCasePointsUAW ucpUAW = UseCasePointsUAW(
       simple: simpleActors,
@@ -115,11 +115,11 @@ class _UCPPageState extends State<UCPPage> {
     String uid = '';
     bool isOnPressedSave = false;
     double ucpValue = ucpCalculate(uucw, uaw, tcfValue, ecfValue);
-    UseCasePoint ucpUCP = UseCasePoint(
+    Project ucpUCP = Project(
       nameProject: _nameProjectController.text,
       createdProject: DateTime.now(),
       updatedProject: DateTime.now(),
-      uucp: ucpUUCW,
+      uucw: ucpUUCW,
       tcf: ucpTCF,
       ecf: ucpECF,
       uaw: ucpUAW,
@@ -340,7 +340,7 @@ class _UCPPageState extends State<UCPPage> {
                                                   .createUseCasePoints(
                                                 uid: uid,
                                                 ucp: ucpUCP,
-                                                uucp: ucpUUCW,
+                                                uucw: ucpUUCW,
                                                 tcf: ucpTCF,
                                                 uaw: ucpUAW,
                                                 ecf: ucpECF,

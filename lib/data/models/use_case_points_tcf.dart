@@ -30,4 +30,22 @@ class UseCasePointsTCF {
     required this.t13,
     required this.tcf,
   });
+  factory UseCasePointsTCF.fromMap(Map<String, dynamic> map) {
+    return UseCasePointsTCF(
+      t1: map['DistributedSystem'] ?? 0,
+      t2: map['ResponseTime/PerformanceObjectives'] ?? 0,
+      t3: map['End-UserEfficiency'] ?? 0,
+      t4: map['InternalProcessingComplexity'] ?? 0,
+      t5: map['CodeReusability'] ?? 0,
+      t6: map['EasyToInstall'] ?? 0,
+      t7: map['EasyToUser'] ?? 0,
+      t8: map['PortabilityToOtherPlatforms'] ?? 0,
+      t9: map['SystemMaintenance'] ?? 0,
+      t10: map['Concurrent/parallelProcessing'] ?? 0,
+      t11: map['SecurityFeatures'] ?? 0,
+      t12: map['AccessForThirdParties'] ?? 0,
+      t13: map['EndUserTraining'] ?? 0,
+      tcf: map['TCF: '] ?? 0,
+    );
+  }
 }

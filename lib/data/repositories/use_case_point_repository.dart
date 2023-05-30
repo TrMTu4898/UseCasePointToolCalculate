@@ -3,7 +3,7 @@ import 'package:usecasepointstool/data/models/use_case_points.dart';
 import '../models/use_case_points_ecf.dart';
 import '../models/use_case_points_tcf.dart';
 import '../models/use_case_points_uaw.dart';
-import '../models/use_case_points_uucp.dart';
+import '../models/use_case_points_uucw.dart';
 import 'package:logging/logging.dart';
 
 class UseCasePointsRepository {
@@ -13,8 +13,8 @@ class UseCasePointsRepository {
 //Function create a new Use CasePoints
   Future<void> createUseCasePoints({
     required String uid,
-    required UseCasePoint ucp,
-    required UseCasePointsUUCP uucp,
+    required Project ucp,
+    required UseCasePointsUUCW uucw,
     required UseCasePointsTCF tcf,
     required UseCasePointsUAW uaw,
     required UseCasePointsECF ecf,
@@ -27,11 +27,11 @@ class UseCasePointsRepository {
         'Created Date ': DateTime.now(),
         'Updated Date ': DateTime.now(),
         'UCP': ucp.ucp,
-        'UUCP': {
-          'Simple': uucp.simple,
-          'Average': uucp.average,
-          'Complex': uucp.complex,
-          'UUCP': uucp.uucp,
+        'UUCW': {
+          'Simple': uucw.simple,
+          'Average': uucw.average,
+          'Complex': uucw.complex,
+          'UUCW': uucw.uucw,
         },
         'UAW': {
           'Simple': uaw.simple,
@@ -78,8 +78,8 @@ class UseCasePointsRepository {
   Future<void> updateUseCasePoints({
     required String pid,
     required String uid,
-    required UseCasePoint ucp,
-    required UseCasePointsUUCP uucp,
+    required Project ucp,
+    required UseCasePointsUUCW uucw,
     required UseCasePointsTCF tcf,
     required UseCasePointsUAW uaw,
     required UseCasePointsECF ecf,
@@ -89,11 +89,11 @@ class UseCasePointsRepository {
         'Name Project': ucp.nameProject,
         'Updated Date ': DateTime.now(),
         'UCP': ucp.ucp,
-        'UUCP': {
-          'Simple': uucp.simple,
-          'Average': uucp.average,
-          'Complex': uucp.complex,
-          'UUCP': uucp.uucp,
+        'UUCW': {
+          'Simple': uucw.simple,
+          'Average': uucw.average,
+          'Complex': uucw.complex,
+          'UUCW': uucw.uucw,
         },
         'UAW': {
           'Simple': uaw.simple,
@@ -135,15 +135,21 @@ class UseCasePointsRepository {
   }
 
 // Function to get a specific use case point document by ID
-  Future<DocumentSnapshot<Object?>> getUseCasePoints(String id) async {
-    try {
-      final snapshot = await _useCasePointsCollection.doc(id).get();
-      return snapshot;
-    } catch (e) {
-      _logger.severe('Failed to get Use Case Points:', e);
-      rethrow;
-    }
+  Future<List<Project>> getProjectsByUid(String uid) async {
+    final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
+        .collection('Project')
+        .where('uid', isEqualTo: uid)
+        .get();
+
+    final List<Project> projects = snapshot.docs.map((DocumentSnapshot<Map<String, dynamic>> doc) {
+      final data = doc.data();
+      final project = Project.fromMap(data!);
+      return project;
+    }).toList();
+
+    return projects;
   }
+
 
 // Function to delete a specific use case point document by ID
   Future<void> deleteUseCasePoints(String id) async {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class WidgetHistoryCard extends StatefulWidget {
   final String nameText;
@@ -21,15 +22,12 @@ class WidgetHistoryCard extends StatefulWidget {
 class _WidgetHistoryCard extends State<WidgetHistoryCard> {
   @override
   Widget build(BuildContext context) {
-    return ConstrainedBox(
-      constraints: const BoxConstraints(
-        maxHeight: 150,
-      ),
-      child: Card(
+    return Card(
+        borderOnForeground:false ,
         elevation: 5,
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(15),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -112,7 +110,6 @@ class _WidgetHistoryCard extends State<WidgetHistoryCard> {
             ],
           ),
         ),
-      ),
     );
   }
 }
