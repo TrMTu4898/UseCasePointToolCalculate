@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import '../../data/repositories/use_case_point_repository.dart';
+import '../../data/models/use_case_points.dart';
 import '../../util/ecf_calculate.dart';
+import '../../util/fileio.dart';
 import '../../util/tcf_calculate.dart';
 import '../../util/uaw_calculate.dart';
 import '../../util/uucw_calculate.dart';
@@ -20,6 +23,9 @@ class UseCasePointBloc extends Bloc<UseCasePointEvent, UseCasePointState> {
     on<CalculateUAWEvent>(_onCalculateUAW);
     on<CalculateTCFEvent>(_onCalculateTCF);
     on<CalculateECFEvent>(_onCalculateECF);
+    on<EditingHistory>(_onEditingHistory);
+    on<EditingImport>(_onEditingImport);
+
   }
   Future<void> _onCalculateUUCW(
       CalculateUUCWEvent event, Emitter<UseCasePointState> emit) async {
@@ -70,6 +76,36 @@ class UseCasePointBloc extends Bloc<UseCasePointEvent, UseCasePointState> {
       emit(UseCasePointStateECFError());
     }
   }
+
+  Future<void> _onEditingHistory (
+      EditingHistory event, Emitter<UseCasePointState> emit
+      ) async{
+    try{
+      final UseCasePointsRepository useCasePointsRepository = UseCasePointsRepository();
+      emit(HistoryLoading());
+      Project? project = await useCasePointsRepository.getProject(event.pid);
+        emit(HistorySuccess(project: project!, pid: event.pid));
+
+    }catch(e){
+      print(e);
+      emit(HistoryFailure());
+    }
+
+  }
+  Future<void> _onEditingImport (
+      EditingImport event, Emitter<UseCasePointState> emit
+      ) async{
+    String filePath = '';
+    try{
+      Project project = await readFromExcel(filePath);
+      emit(ImportSuccess(project: project));
+    }catch(_){
+
+    }
+  }
+
+
+
   double get uucp {
     final state = this.state;
     if (state is UseCasePointStateUUCWSuccess) {

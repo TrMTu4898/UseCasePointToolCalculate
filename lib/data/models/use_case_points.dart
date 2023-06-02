@@ -39,9 +39,9 @@ class Project {
     final UseCasePointsUAW uaw = UseCasePointsUAW.fromMap(uawMap);
 
     return Project(
-      nameProject: map['Name Project'] ?? '',
-      createdProject: (map['Created Date '] as Timestamp).toDate(),
-      updatedProject: (map['Updated Date '] as Timestamp).toDate(),
+      nameProject: map['NameProject'] ?? '',
+      createdProject: (map['CreatedDate'] as Timestamp).toDate(),
+      updatedProject: (map['UpdatedDate'] as Timestamp).toDate(),
       uucw: uucw,
       tcf: tcf,
       ecf: ecf,
@@ -50,5 +50,6 @@ class Project {
       uid: map['uid'] ?? '',
     );
   }
+
 
 }

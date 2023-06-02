@@ -65,3 +65,20 @@ class CalculateUCPEvent extends UseCasePointEvent{
   @override
   List<Object> get props => [uucp,uaw,ecf,tcf];
 }
+
+
+class EditingHistory extends UseCasePointEvent{
+  final String pid;
+  const EditingHistory({
+    required this.pid
+});
+  @override
+  List<Object> get props => [pid];
+}
+
+
+class EditingImport extends UseCasePointEvent{
+
+  @override
+  List<Object> get props => [];
+}

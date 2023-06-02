@@ -24,11 +24,11 @@ class UseCasePointsECF {
     return UseCasePointsECF(
       e1: map['FamiliarityWithDevelopmentProcessUsed'] ?? 0,
       e2: map['ApplicationExperience'] ?? 0,
-      e3: map['Object-orientedExperienceOfTeam'] ?? 0,
+      e3: map['ObjectOrientedExperienceOfTeam'] ?? 0,
       e4: map['LeadAnalystCapability'] ?? 0,
       e5: map['MotivationOfTheTeam'] ?? 0,
       e6: map['StabilityOfRequirements'] ?? 0,
-      e7: map['Part-timeStaff'] ?? 0,
+      e7: map['PartTimeStaff'] ?? 0,
       e8: map['DifficultProgrammingLanguage'] ?? 0,
       ecf: map['ECF: '] ?? 0,
     );

@@ -127,14 +127,12 @@ class _HomeViewScreenState extends State<HomeViewScreen> {
       },
       child: Builder(
         builder: (context) {
-          print(uid);
-
           return isAuthentication
               ? AutoTabsRouter.pageView(
             routes: [
               const HomeRoute(),
               UseCasePointRoute(authenticationBloc: authenticationBloc),
-              UseCasePointHistoryRoute(id:uid),
+             const UseCasePointHistoryRoute(),
               ProfileRoute( profileBloc: profileBloc, authenticationBloc: authenticationBloc),
             ],
             physics: const NeverScrollableScrollPhysics(),

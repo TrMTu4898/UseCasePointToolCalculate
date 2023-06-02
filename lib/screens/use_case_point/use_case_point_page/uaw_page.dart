@@ -7,7 +7,9 @@ import 'package:usecasepointstool/widgets/button/button_calculate.dart';
 import 'package:usecasepointstool/widgets/button/button_widget.dart';
 import 'package:usecasepointstool/widgets/widgets_screen/widget_table.dart';
 
+import '../../../data/models/use_case_points_uaw.dart';
 import '../../../widgets/text/text_field_bloc_builder.dart';
+import 'uucw_page.dart';
 
 @RoutePage()
 class UAWPage extends StatefulWidget {
@@ -56,45 +58,65 @@ class _UAWPageState extends State<UAWPage> {
     const Color colorTextField = Color(0xFFFFFFFF);
 
     return Scaffold(
-        backgroundColor: const Color(0xFFF5F5F5),
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF50C2C9),
-          automaticallyImplyLeading: false,
-          title: const Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Text(
-                  'Main UAW',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+      backgroundColor: const Color(0xFFF5F5F5),
+      appBar: AppBar(
+        backgroundColor: const Color(0xFF50C2C9),
+        automaticallyImplyLeading: false,
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Text(
+                'Main UAW',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
-              Text(
-                '2/5',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    color: Colors.white),
-              ),
-              SizedBox(
-                width: 10,
-              )
-            ],
-          ),
-          shape: const ContinuousRectangleBorder(
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(20),
-                bottomRight: Radius.circular(
-                  20,
-                )),
-          ),
+            ),
+            Text(
+              '2/5',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Colors.white),
+            ),
+            SizedBox(
+              width: 10,
+            )
+          ],
         ),
-        body: FormBlocListener<UAWFormBloc, String, String>(
+        shape: const ContinuousRectangleBorder(
+          borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(
+                20,
+              )),
+        ),
+      ),
+      body: BlocBuilder<UseCasePointBloc, UseCasePointState>(
+        bloc: widget.useCasePointBloc,
+        builder: (context, state){
+          widget.useCasePointBloc.add(EditingHistory(pid: pid));
+          if(state is HistorySuccess){
+            UseCasePointsUAW useCasePointsUAW = UseCasePointsUAW(
+              simple: state.project.uaw.simple,
+              complex: state.project.uaw.complex,
+              average: state.project.uaw.average,
+              uaw: state.project.uaw.uaw,
+            );
+            _simpleActor = useCasePointsUAW.simple;
+            _averageActor = useCasePointsUAW.average;
+            _complexActor = useCasePointsUAW.complex;
+            uaw = useCasePointsUAW.uaw;
+            data[0][3] = _simpleActor.toString();
+            data[1][3] = _averageActor.toString();
+            data[2][3] = _complexActor.toString();
+            data[3][4] = uaw.toString();
+          }
+          return FormBlocListener<UAWFormBloc, String, String>(
             formBloc: widget.uawFormBloc,
             onSubmitting: (context, state) {},
             onSuccess: (context, state) {
@@ -166,7 +188,10 @@ class _UAWPageState extends State<UAWPage> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                                top: paddingTextTop, bottom: paddingTextBottom,left: paddingTextLeft,right: paddingTextRight),
+                                top: paddingTextTop,
+                                bottom: paddingTextBottom,
+                                left: paddingTextLeft,
+                                right: paddingTextRight),
                             child: WidgetTextFieldBloc(
                               prefixIcon: null,
                               onSubmitted: (value) {
@@ -187,7 +212,10 @@ class _UAWPageState extends State<UAWPage> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                                top: paddingTextTop, bottom: paddingTextBottom,left: paddingTextLeft,right: paddingTextRight),
+                                top: paddingTextTop,
+                                bottom: paddingTextBottom,
+                                left: paddingTextLeft,
+                                right: paddingTextRight),
                             child: WidgetTextFieldBloc(
                               prefixIcon: null,
                               onSubmitted: (value) {
@@ -208,7 +236,10 @@ class _UAWPageState extends State<UAWPage> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(
-                                top: paddingTextTop, bottom: paddingTextBottom,left: paddingTextLeft,right: paddingTextRight),
+                                top: paddingTextTop,
+                                bottom: paddingTextBottom,
+                                left: paddingTextLeft,
+                                right: paddingTextRight),
                             child: WidgetTextFieldBloc(
                               textInputAction: TextInputAction.done,
                               keyboardType: TextInputType.number,
@@ -239,7 +270,7 @@ class _UAWPageState extends State<UAWPage> {
                                 radiusCircular: 24,
                                 textSize: 18,
                                 sizeButton:
-                                    Size(screenWidth / 1.3, screenWidth / 8),
+                                Size(screenWidth / 1.3, screenWidth / 8),
                               ),
                             ),
                           ),
@@ -249,6 +280,10 @@ class _UAWPageState extends State<UAWPage> {
                   ),
                 ),
               ],
-            )));
+            ),
+          );
+        },
+      )
+    );
   }
 }

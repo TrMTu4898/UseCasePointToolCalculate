@@ -114,11 +114,19 @@ class _CustomCardState extends State<CustomCard> {
                             children: [
                               const Padding(
                                 padding: EdgeInsets.only(left: 10, right: 0),
-                                child: Text('Ratting:'),
+                                child: Text('Ratting:',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(left: 5, right: 0),
-                                child: Text('$selectedValue'),
+                                child: Text('$selectedValue',
+                                  style:const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                               const Padding(
                                 padding: EdgeInsets.only(left: 0, right: 10),
@@ -143,47 +151,6 @@ class _CustomCardState extends State<CustomCard> {
                       },
                     ),
                   )
-                  // DecoratedBox(
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(10),
-                  //     color: const Color(0xFF00BCD4),
-                  //   ),
-                  //   // child: SizedBox(
-                  //   //   width: 130,
-                  //   //   height: 30,
-                  //   //   child: Row(
-                  //   //     mainAxisSize: MainAxisSize.max,
-                  //   //     children: [
-                  //   //       DropdownButtonHideUnderline(
-                  //   //         child: DropdownButton2<String>(
-                  //   //           customButton: Row(
-                  //   //             mainAxisSize: MainAxisSize.max,
-                  //   //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   //             children: [
-                  //   //               Text('Ratting $selectedValue'),
-                  //   //               const Icon(Icons.arrow_drop_down),
-                  //   //             ],
-                  //   //           ),
-                  //   //           value: selectedValue,
-                  //   //           items: widget.dropdownItems
-                  //   //               .map((String value) =>
-                  //   //               DropdownMenuItem<String>(
-                  //   //                 value: value,
-                  //   //                 child: Text(value),
-                  //   //               ))
-                  //   //               .toList(),
-                  //   //           onChanged: (value){
-                  //   //             widget.onDropdownChanged(value);
-                  //   //             setState(() {
-                  //   //               selectedValue = value;
-                  //   //             });
-                  //   //           },
-                  //   //         ),
-                  //   //       ),
-                  //   //     ],
-                  //   //   ),
-                  //   // ),
-                  // ),
                 ],
               )
             ],

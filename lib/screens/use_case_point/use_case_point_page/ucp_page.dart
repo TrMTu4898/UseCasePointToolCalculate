@@ -11,6 +11,7 @@ import '../../../data/models/use_case_points.dart';
 import '../../../data/repositories/use_case_point_repository.dart';
 import '../../../layout/top_left_layout.dart';
 import '../../../router/auto_router.gr.dart';
+import '../../../util/fileio.dart';
 import 'ecf_page.dart';
 import 'tcf_page.dart';
 import 'uaw_page.dart';
@@ -114,10 +115,9 @@ class _UCPPageState extends State<UCPPage> {
     );
     String uid = '';
     bool isOnPressedSave = false;
-    String nameProject = _nameProjectController.text;
     double ucpValue = ucpCalculate(uucw, uaw, tcfValue, ecfValue);
     Project ucpUCP = Project(
-      nameProject: nameProject,
+      nameProject: _nameProjectController.text,
       createdProject: DateTime.now(),
       updatedProject: DateTime.now(),
       uucw: ucpUUCW,
@@ -334,15 +334,26 @@ class _UCPPageState extends State<UCPPage> {
                                     child: ButtonWidget(
                                       onPressed: isOnPressedSave
                                           ? () {
-                                              useCasePointsRepository
-                                                  .createUseCasePoints(
-                                                uid: uid,
-                                                ucp: ucpUCP,
-                                                uucw: ucpUUCW,
-                                                tcf: ucpTCF,
-                                                uaw: ucpUAW,
-                                                ecf: ucpECF,
-                                              );
+                                        String projectName = _nameProjectController.text;
+                                        if (projectName.isNotEmpty) {
+                                          // Lưu giá trị vào Firebase
+                                          useCasePointsRepository.createUseCasePoints(
+                                            nameProject: projectName,
+                                            uid: uid,
+                                            ucp: ucpUCP,
+                                            uucw: ucpUUCW,
+                                            tcf: ucpTCF,
+                                            uaw: ucpUAW,
+                                            ecf: ucpECF,
+                                          );
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(content: Text('Saved successfully, you can check in the history.')),
+                                        );
+                                        } else {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(content: Text('Please enter project name')),
+                                          );
+                                        }
                                             }
                                           : () {},
                                       backgroundColor: const Color(0xFF50C2C9),
@@ -363,7 +374,23 @@ class _UCPPageState extends State<UCPPage> {
                                     padding: const EdgeInsets.only(
                                         top: 20, bottom: paddingBottom),
                                     child: ButtonWidget(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Project project = Project(
+                                            nameProject: _nameProjectController.text,
+                                            createdProject: DateTime.now(),
+                                            updatedProject: DateTime.now(),
+                                            uucw: ucpUUCW,
+                                            tcf: ucpTCF,
+                                            uaw: ucpUAW,
+                                            ecf: ucpECF,
+                                            ucp: ucpValue,
+                                            uid: uid
+                                        );
+                                        setState(() {
+                                          writeToExcel(project);
+
+                                        });
+                                      },
                                       backgroundColor: const Color(0xFF50C2C9),
                                       radiusCircular: 14,
                                       sizeButton: Size(

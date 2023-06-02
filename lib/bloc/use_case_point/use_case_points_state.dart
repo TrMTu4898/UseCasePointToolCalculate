@@ -89,3 +89,48 @@ class UseCasePointStateECFError extends UseCasePointState{
   @override
   List<Object> get props =>[];
 }
+
+
+class HistoryLoading extends UseCasePointState{
+
+  @override
+  List<Object> get props =>[];
+}
+
+class HistorySuccess extends UseCasePointState{
+  final Project project;
+  final String pid;
+  const HistorySuccess({
+    required this.project,
+    required this.pid
+});
+  @override
+  List<Object> get props =>[project,pid];
+}
+
+class HistoryFailure extends UseCasePointState{
+
+  @override
+  List<Object> get props =>[];
+}
+
+class ImportLoading extends UseCasePointState{
+
+  @override
+  List<Object> get props =>[];
+}
+
+class ImportSuccess extends UseCasePointState{
+  final Project project;
+  const ImportSuccess({
+    required this.project
+});
+  @override
+  List<Object> get props =>[project];
+}
+
+class ImportFailure extends UseCasePointState{
+
+  @override
+  List<Object> get props =>[];
+}

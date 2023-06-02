@@ -2,11 +2,13 @@ import 'package:auto_route/auto_route.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
+import 'package:usecasepointstool/data/models/use_case_points_uucw.dart';
 import '../../../bloc/use_case_point/use_case_points_bloc.dart';
 import '../../../layout/top_left_layout.dart';
 import '../../../widgets/button/button_widget.dart';
 import '../../../widgets/text/text_field_bloc_builder.dart';
 import '../../../widgets/widgets_screen/widget_table.dart';
+import '../../history/use_case_point_history_screen.dart';
 
 @RoutePage()
 class UUCWPage extends StatefulWidget {
@@ -20,7 +22,7 @@ class UUCWPage extends StatefulWidget {
 }
 
 double uucw = 0;
-
+String pid = '';
 class _UUCWPageState extends State<UUCWPage> {
   int _simpleUUCW = 0;
   int _averageUUCW = 0;
@@ -96,164 +98,186 @@ class _UUCWPageState extends State<UUCWPage> {
               )),
         ),
       ),
-      body: FormBlocListener<UUCWFormBloc, String, String>(
-        formBloc: widget.uucwFormBloc,
-        onSubmitting: (context, state) {},
-        onSuccess: (context, state) {
-          // Show the result of the calculation
-          print(state);
+      body: BlocBuilder<UseCasePointBloc,UseCasePointState>(
+        bloc: widget.useCasePointBloc,
+        builder: (context, state){
 
-          final uucwState = widget.useCasePointBloc.state;
-          if (uucwState is UseCasePointStateUUCWSuccess) {
-            uucw = uucwState.uucw;
-            setState(() {
-              data[3][4] = uucwState.uucw.toString();
-            });
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Calculate success')),
+          if(state is HistorySuccess){
+            pid = state.pid;
+            UseCasePointsUUCW useCasePointsUUCW = UseCasePointsUUCW(
+              uucw: state.project.uucw.uucw,
+              average: state.project.uucw.average,
+              complex: state.project.uucw.complex,
+              simple: state.project.uucw.simple,
             );
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Calculate failure')),
-            );
+            _simpleUUCW = useCasePointsUUCW.simple ;
+            _averageUUCW = useCasePointsUUCW.average;
+            _complexUUCW = useCasePointsUUCW.complex;
+            uucw = useCasePointsUUCW.uucw;
+            data[0][3] = _simpleUUCW.toString();
+            data[1][3] = _averageUUCW.toString();
+            data[2][3] = _complexUUCW.toString();
+            data[3][4] = uucw.toString();
           }
-        },
-        onFailure: (context, state) {
-          // Show an error message if the form fails to submit
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Calculate failure')),
-          );
-        },
-        child: Stack(
-          children: [
-            const Positioned(
-              top: 0,
-              left: 0,
-              child: TopLeftLayout(),
-            ),
-            Positioned.fill(
-              child: Center(
-                child: SingleChildScrollView(
-                  reverse: true,
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 5),
-                        child: Container(
-                          width: screenWidth - 30,
-                          child: WidgetTable(
-                            data: data,
-                            header: header,
-                          ),
-                        ),
+          return FormBlocListener<UUCWFormBloc, String, String>(
+            formBloc: widget.uucwFormBloc,
+            onSubmitting: (context, state) {},
+            onSuccess: (context, state) {
+              // Show the result of the calculation
+              final uucwState = widget.useCasePointBloc.state;
+              if (uucwState is UseCasePointStateUUCWSuccess) {
+                uucw = uucwState.uucw;
+                setState(() {
+                  data[3][4] = uucwState.uucw.toString();
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Calculate success')),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Calculate failure')),
+                );
+              }
+            },
+            onFailure: (context, state) {
+              // Show an error message if the form fails to submit
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Calculate failure')),
+              );
+            },
+            child: Stack(
+              children: [
+                const Positioned(
+                  top: 0,
+                  left: 0,
+                  child: TopLeftLayout(),
+                ),
+                Positioned.fill(
+                  child: Center(
+                    child: SingleChildScrollView(
+                      reverse: true,
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.of(context).viewInsets.bottom,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10, bottom: 10),
-                        child: Container(
-                            width: screenWidth - 30,
-                            child: const Center(
-                              child: Text(
-                                'Table 1: Calculate UUCW',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 14,
-                                  color: Colors.blue,
-                                ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5, bottom: 5),
+                            child: Container(
+                              width: screenWidth - 30,
+                              child: WidgetTable(
+                                data: data,
+                                header: header,
                               ),
-                            )),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: paddingTextTop, bottom: paddingTextBottom,left: paddingTextLeft,right: paddingTextRight),
-                        child: WidgetTextFieldBloc(
-                          prefixIcon: null,
-                          onSubmitted: (value) {
-                            FocusScope.of(context).requestFocus(nodeTwo);
-                          },
-                          onChange: (value) {
-                            setState(() {
-                              _simpleUUCW = int.tryParse(value) ?? 0;
-                              data[0][3] = _simpleUUCW.toString();
-                            });
-                          },
-                          hintText: 'Enter number of Simple Use Case',
-                          focusNode: null,
-                          textFieldBloc: widget.uucwFormBloc.simpleUUCW,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.next,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: paddingTextTop, bottom: paddingTextBottom,left: paddingTextLeft,right: paddingTextRight),
-                        child: WidgetTextFieldBloc(
-                          prefixIcon: null,
-                          onSubmitted: (value) {
-                            FocusScope.of(context).requestFocus(nodeThree);
-                          },
-                          onChange: (value) {
-                            setState(() {
-                              _averageUUCW = int.tryParse(value) ?? 0;
-                              data[1][3] = _averageUUCW.toString();
-                            });
-                          },
-                          hintText: 'Enter number of Average Use Case',
-                          focusNode: nodeTwo,
-                          textFieldBloc: widget.uucwFormBloc.averageUUCW,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.next,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top: paddingTextTop, bottom: paddingTextBottom,left: paddingTextLeft,right: paddingTextRight),
-                        child: WidgetTextFieldBloc(
-                          textInputAction: TextInputAction.done,
-                          keyboardType: TextInputType.number,
-                          textFieldBloc: widget.uucwFormBloc.complexUUCW,
-                          focusNode: nodeThree,
-                          hintText: 'Enter number of Complex Use Case',
-                          onChange: (value) {
-                            setState(() {
-                              _complexUUCW = int.tryParse(value) ?? 0;
-                              data[2][3] = _complexUUCW.toString();
-                            });
-                          },
-                          onSubmitted: (value) {
-                            onPressed:
-                            widget.uucwFormBloc.submit();
-                          },
-                          prefixIcon: null,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5, bottom: 0),
-                        child: Center(
-                          child: ButtonWidget(
-                            onPressed: widget.uucwFormBloc.submit,
-                            title: 'Calculate',
-                            backgroundColor: const Color(0xFF50C2C9),
-                            textColor: Colors.white,
-                            radiusCircular: 24,
-                            textSize: 18,
-                            sizeButton:
-                                Size(screenWidth / 1.3, screenWidth / 8),
+                            ),
                           ),
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
+                            child: Container(
+                                width: screenWidth - 30,
+                                child: const Center(
+                                  child: Text(
+                                    'Table 1: Calculate UUCW',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 14,
+                                      color: Colors.blue,
+                                    ),
+                                  ),
+                                )),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: paddingTextTop, bottom: paddingTextBottom,left: paddingTextLeft,right: paddingTextRight),
+                            child: WidgetTextFieldBloc(
+                              prefixIcon: null,
+                              onSubmitted: (value) {
+                                FocusScope.of(context).requestFocus(nodeTwo);
+                              },
+                              onChange: (value) {
+                                setState(() {
+                                  _simpleUUCW = int.tryParse(value) ?? 0;
+                                  data[0][3] = _simpleUUCW.toString();
+                                });
+                              },
+                              hintText: 'Enter number of Simple Use Case',
+                              focusNode: null,
+                              textFieldBloc: widget.uucwFormBloc.simpleUUCW,
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.next,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: paddingTextTop, bottom: paddingTextBottom,left: paddingTextLeft,right: paddingTextRight),
+                            child: WidgetTextFieldBloc(
+                              prefixIcon: null,
+                              onSubmitted: (value) {
+                                FocusScope.of(context).requestFocus(nodeThree);
+                              },
+                              onChange: (value) {
+                                setState(() {
+                                  _averageUUCW = int.tryParse(value) ?? 0;
+                                  data[1][3] = _averageUUCW.toString();
+                                });
+                              },
+                              hintText: 'Enter number of Average Use Case',
+                              focusNode: nodeTwo,
+                              textFieldBloc: widget.uucwFormBloc.averageUUCW,
+                              keyboardType: TextInputType.number,
+                              textInputAction: TextInputAction.next,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: paddingTextTop, bottom: paddingTextBottom,left: paddingTextLeft,right: paddingTextRight),
+                            child: WidgetTextFieldBloc(
+                              textInputAction: TextInputAction.done,
+                              keyboardType: TextInputType.number,
+                              textFieldBloc: widget.uucwFormBloc.complexUUCW,
+                              focusNode: nodeThree,
+                              hintText: 'Enter number of Complex Use Case',
+                              onChange: (value) {
+                                setState(() {
+                                  _complexUUCW = int.tryParse(value) ?? 0;
+                                  data[2][3] = _complexUUCW.toString();
+                                });
+                              },
+                              onSubmitted: (value) {
+                                onPressed:
+                                widget.uucwFormBloc.submit();
+                              },
+                              prefixIcon: null,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5, bottom: 0),
+                            child: Center(
+                              child: ButtonWidget(
+                                onPressed: widget.uucwFormBloc.submit,
+                                title: 'Calculate',
+                                backgroundColor: const Color(0xFF50C2C9),
+                                textColor: Colors.white,
+                                radiusCircular: 24,
+                                textSize: 18,
+                                sizeButton:
+                                Size(screenWidth / 1.3, screenWidth / 8),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
+          );;
+        },
       ),
+
     );
   }
 }

@@ -12,19 +12,7 @@ class AppRouter extends $AppRouter{
     children: [
       RedirectRoute(path: '', redirectTo: 'Home'),
       AutoRoute(path: 'Home', page: HomeRoute.page),
-      AutoRoute(path: ':id', page: UseCasePointHistoryRoute.page,
-        children: [
-          AutoRoute(page: UseCasePointHistoryDetailRoute.page,path:':id',
-              children: [
-                AutoRoute(page: UUCWHistory.page),
-                AutoRoute(page:UAWHistory.page),
-                AutoRoute(page: TCFHistory.page),
-                AutoRoute(page: ECFHistory.page),
-                AutoRoute(page: UCPHistory.page),
-              ],
-          ),
-        ]
-      ),
+      AutoRoute(path: 'History', page: UseCasePointHistoryRoute.page),
       AutoRoute(path: 'Profile', page: ProfileRoute.page, maintainState: true),
       AutoRoute(path: 'LogIn',page: LogInRoute.page),
       AutoRoute(path: 'Tool',page: UseCasePointRoute.page,

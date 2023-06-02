@@ -1,7 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:usecasepointstool/bloc/use_case_point/use_case_points_bloc.dart';
 import '../../layout/top_left_layout.dart';
 import '../../router/auto_router.gr.dart';
 import '../../widgets/button/button_import.dart';
@@ -28,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final double screenWidth = size.width;
     final double screenHeight = size.height;
     final myAppBlocData = MyAppBlocProvider.of(context);
+    final UseCasePointBloc useCasePointBloc = myAppBlocData.myAppBloc.useCasePointBloc;
     final AuthenticationBloc authenticationBloc = myAppBlocData.myAppBloc.authenticationBloc;
     return Scaffold(
       appBar: AppBar(
@@ -89,7 +92,26 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Center(
                 child: ImportButton(
                   onPressed: () {
-                    context.pushRoute(const ImportRoute());
+                    Future<void> requestExternalStoragePermission() async {
+                      var status = await Permission.storage.request();
+                      if (status.isGranted) {
+                        // Quyền truy cập bộ nhớ ngoài đã được cấp phép
+                        // Tiến hành đọc hoặc ghi file vào bộ nhớ ngoài ở đây
+                      } else if (status.isDenied) {
+                        status = await Permission.storage.request();
+                        print('123');
+                        // Quyền truy cập bộ nhớ ngoài đã bị từ chối
+                      } else if (status.isPermanentlyDenied) {
+                        status = await Permission.storage.request();
+                        print('456');
+                        openAppSettings();
+                        print('${status}');
+                        // Quyền truy cập bộ nhớ ngoài đã bị từ chối vĩnh viễn, người dùng không thể thay đổi trong ứng dụng
+                      }
+                    }
+                    requestExternalStoragePermission();
+                    //useCasePointBloc.add(EditingImport());
+                    //context.navigateTo(UseCasePointRoute(authenticationBloc: authenticationBloc));
                   },
                 ),
               ),
